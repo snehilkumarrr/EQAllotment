@@ -1,0 +1,50 @@
+.card {
+  width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #9ec4de; /* Blue border color */
+  border-radius: 10px;
+  background-color: #f7f7f7; /* Light gray background color */
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2); /* Box shadow for a raised effect */
+}
+
+h1 {
+  font-size: 30px;
+  text-align: center;
+  padding-bottom: 10px;
+  color: #3498db; /* Blue header text color */
+}
+
+label {
+  font-weight: bold;
+}
+
+input[type="date"],
+select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+button {
+  background-color: #3498db; /* Blue button background color */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 200px;
+}
+
+button:hover {
+  background-color: #1e87d3; /* Darker blue on hover */
+}
+
+p {
+  margin-top: 10px;
+  font-weight: bold;
+}

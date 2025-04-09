@@ -1,0 +1,29 @@
+/* Default styles for larger screens */
+.content-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Set full viewport height */
+}
+
+app-footer {
+  bottom: 0;
+  width: 100%;
+  padding: 10px;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+
+  /* Adjust styles for smaller screens */
+  .content-container {
+    min-height: auto;
+    /* Reset the minimum height */
+  }
+
+  app-footer {
+    position: relative;
+    /* Reset the footer position */
+  }
+}
+
+
