@@ -15,14 +15,16 @@ import { SharedDataService } from 'src/app/Services/sharedData.service';
 })
 export class LoginComponent {
   loginResponse: any;
-  userForm: FormGroup = new FormGroup({
-    username: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required)
+  loginForm: FormGroup = new FormGroup({
+    username: new FormControl(''),
+    password: new FormControl('')
   });
 
   constructor(private router: Router) {}
 
   onSubmit() {
+
+    this.router.navigate(['/apply-quota']);
     // if (this.userForm.invalid) {
     //   this.userForm.markAllAsTouched();  // Show errors if the form is invalid
     //   return;
