@@ -8,6 +8,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavBarComponent } from './Component/nav-bar/nav-bar.component';
 import { FooterComponent } from './Component/footer/footer.component';
 import { NavBarHomeComponent } from './Component/nav-bar-home/nav-bar-home.component';
+import { ApplyQuotaComponent } from './Component/user-homepage/apply-quota/apply-quota.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,12 +17,14 @@ import { NavBarHomeComponent } from './Component/nav-bar-home/nav-bar-home.compo
     LoginComponent,
     NavBarComponent,
     FooterComponent,
-    NavBarHomeComponent
+    NavBarHomeComponent,
+    ApplyQuotaComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
