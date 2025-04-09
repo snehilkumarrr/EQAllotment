@@ -1,5 +1,6 @@
 .card {
-  width: 1000px;
+  width: 100%;
+  max-width: 500px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #9ec4de; /* Blue border color */
