@@ -10,21 +10,30 @@ import { FooterComponent } from './Component/footer/footer.component';
 import { NavBarHomeComponent } from './Component/nav-bar-home/nav-bar-home.component';
 import { ApplyQuotaComponent } from './Component/user-homepage/apply-quota/apply-quota.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ApiDataService } from './Services/apiData.service';
+import { SharedDataService } from './Services/sharedData.service';
+import { CryptoService } from './Services/crypto.service';
+import { HttpClientModule } from '@angular/common/http';
+import { NoSpecialCharsDirective } from './Directive/no-special-chars.directive';
+import { OtpPageComponent } from './Component/otp-page/otp-page.component';
 
 @NgModule({
   declarations: [
+    NoSpecialCharsDirective,
     AppComponent,
     LoginComponent,
     NavBarComponent,
     FooterComponent,
     NavBarHomeComponent,
-    ApplyQuotaComponent
+    ApplyQuotaComponent,
+    OtpPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     ReactiveFormsModule,
+    HttpClientModule 
   ],
   providers: [],
   bootstrap: [AppComponent]

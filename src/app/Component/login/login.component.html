@@ -9,11 +9,14 @@
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <div class="mb-3">
               <label for="username" class="form-label">Username</label>
-              <input type="text" class="form-control" id="username" formControlName="username" placeholder="Enter your username">
+              <input type="text" class="form-control" id="username" [appNoSpecialChars]="['@', '#', '$', '%']" formControlName="username" placeholder="Enter your username">
             </div>
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
               <input type="password" class="form-control" id="password" formControlName="password" placeholder="Enter your password">
+            </div>
+            <div *ngIf="loginForm.get('username')?.errors?.['noSpecialChars']">
+              Special characters like &#64;, #, $, % are not allowed.
             </div>
           
           <div class="d-flex justify-content-between align-items-center">
