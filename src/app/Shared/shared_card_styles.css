@@ -29,6 +29,22 @@ select {
   border-radius: 5px;
   background-color: #fff;
 }
+.pnr-input {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between label and input */
+  margin-bottom: 16px;
+}
+
+.pnr-input label {
+  font-weight: bold;
+}
+
+.pnr-input input {
+  width: 200px;
+  padding: 6px 10px;
+  font-size: 16px;
+}
 
 button {
   background-color: #3498db; /* Blue button background color */

@@ -1,0 +1,32 @@
+.card-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  
+  .card {
+    width: 500px;          /* 🔼 Increase width */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .pnr-input {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .pnr-input label {
+    min-width: 100px;
+    font-weight: 600;
+  }
+  
+  .pnr-input input {
+    flex-grow: 1;
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+  }
