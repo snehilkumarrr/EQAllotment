@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders } from "@angular/common/http";
 import { BehaviorSubject, Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SharedDataService {
   private loginResponse = new BehaviorSubject<any | null>(null);
 
