@@ -20,29 +20,27 @@ export class LoginComponent {
     password: new FormControl('')
   });
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private apiDataservice: ApiDataService) {}
 
   onSubmit() {
 
+    
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();  // Show errors if the form is invalid
+      return;
+    }
+
+    console.log("--here--")
+
+    const formData = this.loginForm.value;
     this.router.navigate(['/apply-quota']);
-    // if (this.userForm.invalid) {
-    //   this.userForm.markAllAsTouched();  // Show errors if the form is invalid
-    //   return;
-    // }
 
-    // const formData = this.userForm.value;
-    // const loginurl = constants.BASE_URL + constants.POST_LOGIN_URL;
+    this.apiDataservice.postLogin(formData).subscribe(
+      (response) => {
 
-    // this._http.post(loginurl, formData).subscribe(
-    //   (response: any) => {
-    //   },
-    //   (err: HttpErrorResponse) => {
-    //     console.error("Login error: ", err);
-    //     this.alertToastModal = {
-    //       type: 'error',
-    //       message: err.status === 401 ? 'Wrong credentials. Please try again.' : Utils.handleError(err)
-    //     };
-    //   }
-    // );
+        //this.tableData1 = Utils.fetchData(response as any);
+      },
+      (error) => console.error('Error adding location:', error)
+    );
   }
 }
