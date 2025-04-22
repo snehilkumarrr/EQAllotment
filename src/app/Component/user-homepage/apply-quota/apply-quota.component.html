@@ -1,6 +1,6 @@
 <div class="form-container container py-5">
   <div class="row justify-content-center mt-5">
-    <div class="col-md-12">
+    <div class="col-md-10"> <!-- Increased width to fit table -->
       <div class="custom-card">
         <div class="card-header d-flex justify-content-center align-items-center">
           Apply Quota
@@ -18,7 +18,6 @@
                 placeholder="Enter 10-digit PNR number"
                 class="form-control"
               />
-              <!-- Validation messages -->
               <small *ngIf="quota?.hasError('required') && quota?.touched" class="text-danger">
                 PNR is required.
               </small>
@@ -34,31 +33,38 @@
             </div>
           </form>
 
-          
-          <div *ngIf="personReport" class="mt-4">
-            <h5 class="text-center mb-3">Quota Report</h5>
-            <table class="table table-bordered text-center">
-              <thead class="thead-light">
-                <tr>
-                  <th>Name</th>
-                  <th>Age</th>
-                  <th>Phone Number</th>
-                  <th> Email</th>
-                  <th>Number of seats Quota Applied For</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{{ personReport.name }}</td>
-                  <td>{{ personReport.age }}</td>
-                  <td>{{ personReport.phone }}</td>
-                  <td>{{ personReport.email }}</td>
-                  <td>{{ personReport.NoofSeats }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <!-- Report Section -->
+          <div class="mt-4">
+            <ng-container *ngIf="personReport; else noData">
+              <h5 class="text-center mb-3">Quota Report</h5>
+              <table class="table table-bordered text-center">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Phone Number</th>
+                    <th>Email</th>
+                    <th>Number of seats Quota Applied For</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ personReport.name }}</td>
+                    <td>{{ personReport.age }}</td>
+                    <td>{{ personReport.phone }}</td>
+                    <td>{{ personReport.email }}</td>
+                    <td>{{ personReport.NoofSeats }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-container>
 
+            <ng-template #noData>
+              <div *ngIf="quotaForm.touched" class="alert alert-warning text-center mt-3">
+                No data found for the given PNR.
+              </div>
+            </ng-template>
+          </div>
         </div>
       </div>
     </div>

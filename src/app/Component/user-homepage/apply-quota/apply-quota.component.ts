@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ApiDataService } from '../../../Services/apiData.service'; // Adjust path as needed
+import { ApiDataService } from 'src/app/Services/apiData.service';
+import { CryptoService } from 'src/app/Services/crypto.service';
+import * as constants from 'src/app/Shared/constants';
 
 @Component({
   selector: 'app-apply-quota',
@@ -11,46 +13,49 @@ export class ApplyQuotaComponent {
   quotaForm: FormGroup;
   personReport: any = null;
 
-  constructor(private fb: FormBuilder, private apiService: ApiDataService) {
+  constructor(
+    private fb: FormBuilder,
+    private apiService: ApiDataService,
+    private cryptoService: CryptoService
+  ) {
     this.quotaForm = this.fb.group({
       quota: [
         '',
-        [
-          Validators.required,
-          Validators.pattern(/^\d{10}$/)  // Exactly 10 digits
-        ]
+        [Validators.required, Validators.pattern(/^\d{10}$/)]
       ]
     });
   }
 
   onSubmit() {
-    if (this.quotaForm.valid) {
-      const requestData = {
-        pnr: this.quotaForm.value.quota // Assuming the backend expects "pnr"
-      };
-
-      // Call the postQuotaRequest method in the ApiDataService
-      this.apiService.postQuotaRequest(requestData).subscribe({
-        next: (response: any) => {
-          const personId = response.personId; // Simulated response (personId: 123)
-          this.fetchPersonDetails(personId); // Fetch details using personId
-        },
-        error: (err) => {
-          console.error('Quota request failed:', err);
-          alert('Failed to apply quota.');
-        }
-      });
+    if (this.quotaForm.invalid) {
+      this.quotaForm.markAllAsTouched();
+      return;
     }
-  }
 
-  fetchPersonDetails(id: number) {
-    this.apiService.getPersonDetails(id).subscribe({
-      next: (data) => {
-        this.personReport = data; // Save the person details
+    const requestData = {
+      pnr: this.quotaForm.value.quota
+    };
+
+    this.apiService.getNoAuth(requestData, constants.api.authPnr).subscribe({
+      next: (response: any) => {
+        console.log("🔐 Raw response:", response);
+
+        if (response?.success && response?.encdata) {
+          try {
+            const decryptedData = this.cryptoService.decrypt(response.encdata);
+            console.log("✅ Decrypted:", decryptedData);
+            this.personReport = decryptedData; // Save to show in the table
+          } catch (e) {
+            console.error("❌ Decryption error:", e);
+            alert("Error while decrypting the response.");
+          }
+        } else {
+          alert("API did not return expected data.");
+        }
       },
       error: (err) => {
-        console.error('Error fetching person details:', err);
-        alert('Could not retrieve person information.');
+        console.error("🚨 Error from API:", err);
+        alert("Something went wrong while fetching data.");
       }
     });
   }
