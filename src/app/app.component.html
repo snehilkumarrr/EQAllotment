@@ -2,8 +2,7 @@
   <div>
     <h1 style="color:#8A5833; font-size:40px; text-align: center; padding:10px;"><u>Indian Railways EQ Management System</u></h1>
   </div>
-  <app-nav-bar *ngIf="showLoginNavBar"></app-nav-bar>
-  <app-nav-bar-home *ngIf="showHomeNavBar"></app-nav-bar-home>
+  <app-nav-bar></app-nav-bar>
   <router-outlet (activate)="showHideNavBar($event)"></router-outlet>
 
 </div>

@@ -30,4 +30,12 @@ export class ApiDataService {
       })
     );
   }
+
+
+
+  getNoAuthNoParam(path:any){
+    const url = constants.BASE_URL + `${path}`;
+    return this.http.get(url)
+  }
+      
 }
