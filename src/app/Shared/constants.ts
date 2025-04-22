@@ -8,3 +8,10 @@ export const RoleName = {
   "ROLE_ZONAL_ADMIN": 2,
   "ROLE_DIVISIONAL_ADMIN": 3,
 }
+
+
+export const api = {
+  "noAuthCaptcha": "/noauth/captcha",
+  "noAuthLogin": "/noauth/login",
+  "authPnr": "/auth/mp/external/pnrEnquiry"
+};
