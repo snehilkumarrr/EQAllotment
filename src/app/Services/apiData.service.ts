@@ -15,9 +15,15 @@ export class ApiDataService {
   postLogin( data:any) {
 
     const encryptedData = this.cryptoService.encrypt(data);
-     const url = constants.BASE_URL + `/user/`;
-     console.log("ecnryptedData" + encryptedData);
-     return this.http.post(url, encryptedData, { headers: Utils.getHeader() })
+     const url = constants.BASE_URL + `/auth/captcha`;
+     return this.http.post(url, encryptedData)
+  }
+
+  postLoginCaptcha( data:any) {
+
+    const encryptedData = this.cryptoService.encrypt(data);
+     const url = constants.BASE_URL + `/auth/login`;
+     return this.http.post(url, encryptedData)
   }
       
 }
