@@ -12,6 +12,7 @@ export const RoleName = {
 
 export const api = {
   "noAuthCaptcha": "/noauth/captcha",
-  "noAuthLogin": "/noauth/login",
+  "loginwithcaptcha": "/noauth/loginwithcaptcha",
+  "otpValidate" : "/noauth/otpvalidate",
   "authPnr": "/auth/mp/external/pnrEnquiry"
 };

@@ -16,14 +16,41 @@ import { CryptoService } from 'src/app/Services/crypto.service';
 })
 export class LoginComponent {
   loginResponse: any;
+  captchaImage:any;
+  uuid:any;
   loginForm: FormGroup = new FormGroup({
     username: new FormControl(''),
-    password: new FormControl('')
+    password: new FormControl(''),
+    captcha: new FormControl('')
   });
 
   constructor(private router: Router, private apiDataservice: ApiDataService, private cryptoService:CryptoService,
     private sharedDataService: SharedDataService
   ) {}
+
+  get captchaImageFn(): string {
+    return 'data:image/png;base64,' + this.captchaImage;
+  }
+
+  ngOnInit(){
+    this.apiDataservice.getNoAuthNoParam( constants.api.noAuthCaptcha).subscribe(
+      (response: any) => {
+        if (response.success) {
+       
+          const decyptedData = this.cryptoService.decrypt(response.encdata);
+          this.captchaImage = decyptedData.captchaImage
+          this.uuid =decyptedData.uuid
+
+        }
+      },
+      (error) => {
+        console.error("--error response--", error);
+        const errorMessage = error?.error?.message || "An unexpected error occurred.";
+        console.log("Login failed:", errorMessage);
+        alert(errorMessage);
+      }
+    );
+  }
 
   onSubmit() {
 
@@ -35,10 +62,16 @@ export class LoginComponent {
 
 
 
-    const formData = this.loginForm.value;
+    const formData = {
+      username: this.loginForm.get('username')?.value,
+      password: this.loginForm.get('password')?.value,
+      captcha: this.loginForm.get('captcha')?.value,
+      uuid: this.uuid
+    }
+    console.log("==---form====" + JSON.stringify(formData))
 
 
-    this.apiDataservice.postAuth(formData, constants.api.noAuthCaptcha).subscribe(
+    this.apiDataservice.postAuth(formData, constants.api.loginwithcaptcha).subscribe(
       (response: any) => {
         if (response.success) {
        
@@ -48,7 +81,9 @@ export class LoginComponent {
           this.router.navigate(['/otp-page'], {
             state: {
               username: this.loginForm.value.username,
-              password: this.loginForm.value.password
+              password: this.loginForm.value.password,
+              captchaImage: this.loginForm.value.captcha,
+              uuid:this.uuid
             }
           });       
 
