@@ -24,5 +24,11 @@ export class ApiDataService {
     const url = constants.BASE_URL + `${path}`;
     return this.http.get(url,{ headers: Utils.getHeader(), params: queryParams })
   }
+
+
+  getNoAuthNoParam(path:any){
+    const url = constants.BASE_URL + `${path}`;
+    return this.http.get(url)
+  }
       
 }

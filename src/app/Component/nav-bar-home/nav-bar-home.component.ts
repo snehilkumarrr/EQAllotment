@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-bar-home.component.css']
 })
 export class NavBarHomeComponent {
-
+  showNavHome:boolean = true;
+  showNav:boolean=false;
 }

@@ -10,29 +10,22 @@ import * as constants from '../../Shared/constants';
 @Component({
   selector: 'app-otp-page',
   templateUrl: './otp-page.component.html',
-  styleUrls: ['./otp-page.component.css']
+  styleUrls: ['./otp-page.component.css','../../Shared/shared_card_styles.css']
 })
 export class OtpPageComponent {
   loginResponse: any;
   captchaResponse:any;
-  captchaImage:any;
+  captchaImageData:any;
   username:any;
   password:any;
+  uuid:any;
   otpForm: FormGroup = new FormGroup({
     otp: new FormControl(''),
-    captcha: new FormControl(''),
   });
 
   constructor(private router: Router, private apiDataservice: ApiDataService, private sharedDataService: SharedDataService,
     private cryptoService: CryptoService, private route: ActivatedRoute
   ) {
-
-    this.sharedDataService.captachEncryptionData.subscribe((captachEncryptionResponse) => {
-      if (captachEncryptionResponse) {
-       
-        this.captchaImage = captachEncryptionResponse.captchaImage
-      }
-    });
   }
 
   ngOnInit() {
@@ -40,11 +33,11 @@ export class OtpPageComponent {
 
      this.username = state.username;
     this.password = state.password;
+    this.captchaImageData = state.captchaImage;
+    this.uuid=state.uuid
   }
 
- get captchaImageFn(): string {
-    return 'data:image/png;base64,' + this.captchaImage;
-  }
+
 
   onSubmit() {
 
@@ -58,13 +51,14 @@ export class OtpPageComponent {
     const formData = {
       ...this.otpForm.value,
       username: this.username,
-      password: this.password
-    };
+      password: this.password,
+      captcha : this.captchaImageData,
+      uuid:this.uuid
+    };console.log("---forData----" + JSON.stringify(formData))
 
 
 
-
-         this.apiDataservice.postAuth(formData,constants.api.noAuthLogin).subscribe(
+         this.apiDataservice.postAuth(formData,constants.api.otpValidate).subscribe(
           (response: any) => {
             if (response.success) {
               const captchaDecyptedData = this.cryptoService.decrypt(response.encdata);
