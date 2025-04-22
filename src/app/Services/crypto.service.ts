@@ -5,17 +5,40 @@ import * as CryptoJS from 'crypto-js';
   providedIn: 'root'
 })
 export class CryptoService {
-  private secretKey = 'thisIsNotSecretKey';
 
-  encrypt(data: any): string {
+  private secretKey = 'EQAeseqSecretKey'; 
+  private secretIv = 'RandomInitVector';   
+  
+  encrypt(data: any): any {
     const plaintext = JSON.stringify(data);
-    const ciphertext = CryptoJS.AES.encrypt(plaintext, this.secretKey).toString();
-    return ciphertext;
-  }
+  
+    const key = CryptoJS.enc.Utf8.parse(this.secretKey);
+    const iv = CryptoJS.enc.Utf8.parse(this.secretIv);
+  
+    const encrypted = CryptoJS.AES.encrypt(plaintext, key, {
+      iv: iv,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+    });
 
+    const encryptedData = {
+      "encdata" : encrypted.toString()
+    }
+  
+    return encryptedData; 
+  }
+  
   decrypt(ciphertext: string): any {
-    const bytes = CryptoJS.AES.decrypt(ciphertext, this.secretKey);
-    const decryptedText = bytes.toString(CryptoJS.enc.Utf8);
-    return JSON.parse(decryptedText);
+    const key = CryptoJS.enc.Utf8.parse(this.secretKey);
+    const iv = CryptoJS.enc.Utf8.parse(this.secretIv);
+  
+    const decrypted = CryptoJS.AES.decrypt(ciphertext, key, {
+      iv: iv,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7
+    });
+  
+    const plaintext = decrypted.toString(CryptoJS.enc.Utf8);
+    return JSON.parse(plaintext);
   }
 }

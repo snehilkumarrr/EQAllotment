@@ -1,4 +1,4 @@
-export const BASE_URL                      = '';
+export const BASE_URL                      = 'http://10.64.24.46:8080/quota-backend';
 //export const BASE_URL                      = 'http://localhost:8080/PIS';
 
 export const POST_LOGIN_URL = '/auth/login';
