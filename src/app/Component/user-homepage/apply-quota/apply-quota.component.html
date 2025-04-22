@@ -1,10 +1,10 @@
 <div class="form-container container py-5">
   <div class="row justify-content-center mt-5">
-    <div class="col-md-6">
-      <div class="card">
+    <div class="col-md-12">
+      <div class="custom-card">
         <div class="card-header d-flex justify-content-center align-items-center">
-            Apply Quota
-          </div>
+          Apply Quota
+        </div>
         <div class="card-body">
           <form [formGroup]="quotaForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
@@ -26,13 +26,39 @@
                 Please enter a valid 10-digit PNR Number.
               </small>
             </div>
-            
+
             <div class="d-flex justify-content-center mt-3">
-                <button type="submit" class="btn btn-primary" [disabled]="quotaForm.invalid">
-                  Apply Quota
-                </button>
-              </div>
+              <button type="submit" class="btn btn-primary" [disabled]="quotaForm.invalid">
+                Apply Quota
+              </button>
+            </div>
           </form>
+
+          
+          <div *ngIf="personReport" class="mt-4">
+            <h5 class="text-center mb-3">Quota Report</h5>
+            <table class="table table-bordered text-center">
+              <thead class="thead-light">
+                <tr>
+                  <th>Name</th>
+                  <th>Age</th>
+                  <th>Phone Number</th>
+                  <th> Email</th>
+                  <th>Number of seats Quota Applied For</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ personReport.name }}</td>
+                  <td>{{ personReport.age }}</td>
+                  <td>{{ personReport.phone }}</td>
+                  <td>{{ personReport.email }}</td>
+                  <td>{{ personReport.NoofSeats }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
         </div>
       </div>
     </div>
