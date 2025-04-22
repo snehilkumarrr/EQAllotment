@@ -37,15 +37,21 @@ export class LoginComponent {
 
     const formData = this.loginForm.value;
 
-    this.sharedDataService.setLoginCredentialData(formData)
 
-    this.apiDataservice.postLogin(formData).subscribe(
+    this.apiDataservice.postAuth(formData, constants.api.noAuthCaptcha).subscribe(
       (response: any) => {
         if (response.success) {
        
           const decyptedData = this.cryptoService.decrypt(response.encdata);
           this.sharedDataService.setCaptachEncryptionData(decyptedData);
-          this.router.navigate(['/otp-page']);
+
+          this.router.navigate(['/otp-page'], {
+            state: {
+              username: this.loginForm.value.username,
+              password: this.loginForm.value.password
+            }
+          });       
+
         }
       },
       (error) => {

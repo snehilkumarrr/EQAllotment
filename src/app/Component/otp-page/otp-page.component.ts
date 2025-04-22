@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { ApiDataService } from 'src/app/Services/apiData.service';
 import { CryptoService } from 'src/app/Services/crypto.service';
 import { SharedDataService } from 'src/app/Services/sharedData.service';
+import { ActivatedRoute } from '@angular/router';
+import * as constants from '../../Shared/constants';
 
 @Component({
   selector: 'app-otp-page',
@@ -14,26 +16,30 @@ export class OtpPageComponent {
   loginResponse: any;
   captchaResponse:any;
   captchaImage:any;
+  username:any;
+  password:any;
   otpForm: FormGroup = new FormGroup({
     otp: new FormControl(''),
     captcha: new FormControl(''),
   });
 
   constructor(private router: Router, private apiDataservice: ApiDataService, private sharedDataService: SharedDataService,
-    private cryptoService: CryptoService
+    private cryptoService: CryptoService, private route: ActivatedRoute
   ) {
-
-    this.sharedDataService.loginCredentialData.subscribe((loginCredentialResponse) => {
-      if (loginCredentialResponse) {
-        this.loginResponse = loginCredentialResponse;
-      }
-    });
 
     this.sharedDataService.captachEncryptionData.subscribe((captachEncryptionResponse) => {
       if (captachEncryptionResponse) {
-        this.captchaImage = this.captchaResponse.captchaImage
+       
+        this.captchaImage = captachEncryptionResponse.captchaImage
       }
     });
+  }
+
+  ngOnInit() {
+    const state = window.history.state;
+
+     this.username = state.username;
+    this.password = state.password;
   }
 
  get captchaImageFn(): string {
@@ -48,21 +54,24 @@ export class OtpPageComponent {
       return;
     }
 
-    console.log("--here--")
 
     const formData = {
       ...this.otpForm.value,
-      username: this.loginResponse.username,
-      password: this.loginResponse.password
+      username: this.username,
+      password: this.password
     };
 
 
-         this.apiDataservice.postLoginCaptcha(formData).subscribe(
+
+
+         this.apiDataservice.postAuth(formData,constants.api.noAuthLogin).subscribe(
           (response: any) => {
             if (response.success) {
-              console.log("Login successful:", response.message);
-              const decyptedData = this.cryptoService.decrypt(response.encdata);
-              console.log("---1---" +JSON.stringify(decyptedData))
+              const captchaDecyptedData = this.cryptoService.decrypt(response.encdata);
+              this.sharedDataService.setloginUserData(captchaDecyptedData);
+              localStorage.setItem("accessToken",captchaDecyptedData.accessToken)
+              this.router.navigate(['/apply-quota']);   
+
             }
           },
           (error) => {
