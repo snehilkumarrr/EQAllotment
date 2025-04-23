@@ -38,3 +38,15 @@
     background-color: #fff;
     margin: auto;
   }
+  .custom-table-header {
+    background-color: #007bff; /* Bootstrap primary blue */
+    color: #ffffff;            /* White text */
+  }
+  
+  .custom-table-header th {
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    background-color: #5f90d7; /* Bootstrap primary blue */
+    color: #ffffff;  
+  }

@@ -39,19 +39,11 @@ export class ApplyQuotaComponent {
     this.apiService.getNoAuth(requestData, constants.api.authPnr).subscribe({
       next: (response: any) => {
         console.log("🔐 Raw response:", response);
-
-        if (response?.success && response?.encdata) {
-          try {
-            const decryptedData = this.cryptoService.decrypt(response.encdata);
-            console.log("✅ Decrypted:", decryptedData);
-            this.personReport = decryptedData; // Save to show in the table
-          } catch (e) {
-            console.error("❌ Decryption error:", e);
-            alert("Error while decrypting the response.");
-          }
-        } else {
-          alert("API did not return expected data.");
-        }
+        console.log("---sucssess--" + response.success)
+        
+            this.personReport = response; // Save to show in the table
+            // alert("Data is"+JSON.stringify(this.personReport)) ;
+         
       },
       error: (err) => {
         console.error("🚨 Error from API:", err);

@@ -36,27 +36,54 @@
           <!-- Report Section -->
           <div class="mt-4">
             <ng-container *ngIf="personReport; else noData">
-              <h5 class="text-center mb-3">Quota Report</h5>
-              <table class="table table-bordered text-center">
-                <thead class="thead-light">
-                  <tr>
-                    <th>Name</th>
-                    <th>Age</th>
-                    <th>Phone Number</th>
-                    <th>Email</th>
-                    <th>Number of seats Quota Applied For</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{{ personReport.name }}</td>
-                    <td>{{ personReport.age }}</td>
-                    <td>{{ personReport.phone }}</td>
-                    <td>{{ personReport.email }}</td>
-                    <td>{{ personReport.NoofSeats }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <!-- Existing Quota Report Table -->
+<h5 class="text-center mb-3">Quota Report</h5>
+<table class="table table-bordered text-center">
+  <thead class="custom-table-header">
+    <tr>
+      <th>PNR Number</th>
+      <th>Train Name</th>
+      <th>Train Number</th>
+      <th>Date of Journey</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ personReport.pnrNumber }}</td>
+      <td>{{ personReport.trainName }}</td>
+      <td>{{ personReport.trainNumber }}</td>
+      <td>{{ personReport.dateOfJourney }}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="mt-4" *ngIf="personReport.passengerList?.length">
+  <h5 class="text-center mb-3">Passenger Details</h5>
+  <table class="table table-bordered text-center">
+    <thead class="custom-table-header">
+      <tr>
+        <th>S. No.</th>
+        <th>Passenger Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Booking Status (Coach No, Berth No, Quota)</th>
+        <th>Current Status (Coach No, Berth No)</th>
+       
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let passenger of personReport.passengerList; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ passenger.passengerName }}</td>
+        <td>{{ passenger.passengerAge }}</td>
+        <td>{{ passenger.passengerGender }}</td>
+        <td>{{ passenger.bookingStatusDetails }}</td>
+        <td>{{ passenger.currentStatusDetails }}</td>
+       
+      </tr>
+    </tbody>
+  </table>
+</div>
+
             </ng-container>
 
             <ng-template #noData>
