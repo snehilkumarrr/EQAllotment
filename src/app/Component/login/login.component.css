@@ -1,0 +1,6 @@
+.refresh-icon {
+  cursor: pointer;
+  font-size: 1.8rem;
+  user-select: none;
+  margin-left: 15px;
+}

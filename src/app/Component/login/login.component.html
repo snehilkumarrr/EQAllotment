@@ -18,6 +18,7 @@
             <div class="mb-3">
               <label for="password" class="form-label">Captcha</label>
               <img [src]="captchaImageFn" alt="CAPTCHA" class="captcha-img"/>
+              <span class="refresh-icon" (click)="getCaptcha()" title="Refresh Captcha">🔄</span>
             </div>
             <div class="mb-3">
               <label for="captcha" class="form-label">Enter above captcha</label>
