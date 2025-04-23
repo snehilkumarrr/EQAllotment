@@ -16,6 +16,8 @@ import { CryptoService } from './Services/crypto.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NoSpecialCharsDirective } from './Directive/no-special-chars.directive';
 import { OtpPageComponent } from './Component/otp-page/otp-page.component';
+import { RbAdminHomepageComponent } from './Component/rb-admin/rb-admin-homepage/rb-admin-homepage.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -26,14 +28,16 @@ import { OtpPageComponent } from './Component/otp-page/otp-page.component';
     FooterComponent,
     NavBarHomeComponent,
     ApplyQuotaComponent,
-    OtpPageComponent
+    OtpPageComponent,
+    RbAdminHomepageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     ReactiveFormsModule,
-    HttpClientModule 
+    HttpClientModule,
+    NgxPaginationModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

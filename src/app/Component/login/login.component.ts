@@ -33,6 +33,10 @@ export class LoginComponent {
   }
 
   ngOnInit(){
+    this.getCaptcha()
+  }
+
+  getCaptcha(){
     this.apiDataservice.getNoAuthNoParam( constants.api.noAuthCaptcha).subscribe(
       (response: any) => {
         if (response.success) {
