@@ -1,1 +1,99 @@
-<p>apply-quota works!</p>
+<div class="form-container container py-5">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-10"> <!-- Increased width to fit table -->
+      <div class="custom-card">
+        <div class="card-header d-flex justify-content-center align-items-center">
+          Apply Quota
+        </div>
+        <div class="card-body">
+          <form [formGroup]="quotaForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="quotaInput">PNR Number</label>
+              <input
+                id="quotaInput"
+                type="text"
+                formControlName="quota"
+                maxlength="10"
+                pattern="\d*"
+                placeholder="Enter 10-digit PNR number"
+                class="form-control"
+              />
+              <small *ngIf="quota?.hasError('required') && quota?.touched" class="text-danger">
+                PNR is required.
+              </small>
+              <small *ngIf="quota?.hasError('pattern') && quota?.touched" class="text-danger">
+                Please enter a valid 10-digit PNR Number.
+              </small>
+            </div>
+
+            <div class="d-flex justify-content-center mt-3">
+              <button type="submit" class="btn btn-primary" [disabled]="quotaForm.invalid">
+                Apply Quota
+              </button>
+            </div>
+          </form>
+
+          <!-- Report Section -->
+          <div class="mt-4">
+            <ng-container *ngIf="personReport; else noData">
+              <!-- Existing Quota Report Table -->
+<h5 class="text-center mb-3">Quota Report</h5>
+<table class="table table-bordered text-center">
+  <thead class="custom-table-header">
+    <tr>
+      <th>PNR Number</th>
+      <th>Train Name</th>
+      <th>Train Number</th>
+      <th>Date of Journey</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{ personReport.pnrNumber }}</td>
+      <td>{{ personReport.trainName }}</td>
+      <td>{{ personReport.trainNumber }}</td>
+      <td>{{ personReport.dateOfJourney }}</td>
+    </tr>
+  </tbody>
+</table>
+<div class="mt-4" *ngIf="personReport.passengerList?.length">
+  <h5 class="text-center mb-3">Passenger Details</h5>
+  <table class="table table-bordered text-center">
+    <thead class="custom-table-header">
+      <tr>
+        <th>S. No.</th>
+        <th>Passenger Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Booking Status (Coach No, Berth No, Quota)</th>
+        <th>Current Status (Coach No, Berth No)</th>
+       
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let passenger of personReport.passengerList; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ passenger.passengerName }}</td>
+        <td>{{ passenger.passengerAge }}</td>
+        <td>{{ passenger.passengerGender }}</td>
+        <td>{{ passenger.bookingStatusDetails }}</td>
+        <td>{{ passenger.currentStatusDetails }}</td>
+       
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+            </ng-container>
+
+            <ng-template #noData>
+              <div *ngIf="quotaForm.touched" class="alert alert-warning text-center mt-3">
+                No data found for the given PNR.
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
