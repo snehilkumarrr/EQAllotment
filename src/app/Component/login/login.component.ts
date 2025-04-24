@@ -7,6 +7,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ApiDataService } from 'src/app/Services/apiData.service';
 import { SharedDataService } from 'src/app/Services/sharedData.service';
 import { CryptoService } from 'src/app/Services/crypto.service';
+import { LoginApiDataService } from 'src/app/Services/loginApiData.service';
 // import { HeaderDataService } from 'src/app/Services/headerData.service';
 
 @Component({
@@ -15,7 +16,6 @@ import { CryptoService } from 'src/app/Services/crypto.service';
   styleUrls: ['./login.component.css', '../../Shared/shared_card_styles.css']
 })
 export class LoginComponent {
-  loginResponse: any;
   captchaImage:any;
   uuid:any;
   loginForm: FormGroup = new FormGroup({
@@ -24,7 +24,7 @@ export class LoginComponent {
     captcha: new FormControl('')
   });
 
-  constructor(private router: Router, private apiDataservice: ApiDataService, private cryptoService:CryptoService,
+  constructor(private router: Router, private loginApiDataservice: LoginApiDataService, private cryptoService:CryptoService,
     private sharedDataService: SharedDataService
   ) {}
 
@@ -37,24 +37,20 @@ export class LoginComponent {
   }
 
   getCaptcha(){
-    this.apiDataservice.getNoAuthNoParam( constants.api.noAuthCaptcha).subscribe(
-      (response: any) => {
-        if (response.success) {
-       
-          const decyptedData = this.cryptoService.decrypt(response.encdata);
-          this.captchaImage = decyptedData.captchaImage
-          this.uuid =decyptedData.uuid
-
-        }
+    this.loginApiDataservice.getNoAuth( constants.api.noAuthCaptcha).subscribe({
+      next: (response: any) => {
+        this.captchaImage = response.captchaImage
+        this.uuid =response.uuid
+         
       },
-      (error) => {
-        console.error("--error response--", error);
-        const errorMessage = error?.error?.message || "An unexpected error occurred.";
-        console.log("Login failed:", errorMessage);
-        alert(errorMessage);
+      error: (err) => {
+        console.error("🚨 Error from API:", err);
+        alert("Something went wrong while fetching data.");
       }
-    );
+    });
   }
+
+
 
   onSubmit() {
 
@@ -75,12 +71,9 @@ export class LoginComponent {
     console.log("==---form====" + JSON.stringify(formData))
 
 
-    this.apiDataservice.postAuth(formData, constants.api.loginwithcaptcha).subscribe(
+    this.loginApiDataservice.postNoAuth(formData, constants.api.loginwithcaptcha).subscribe(
       (response: any) => {
-        if (response.success) {
-       
-          const decyptedData = this.cryptoService.decrypt(response.encdata);
-          this.sharedDataService.setCaptachEncryptionData(decyptedData);
+          this.sharedDataService.setCaptachEncryptionData(response);
 
           this.router.navigate(['/otp-page'], {
             state: {
@@ -91,14 +84,7 @@ export class LoginComponent {
             }
           });       
 
-        }
       },
-      (error) => {
-        console.error("--error response--", error);
-        const errorMessage = error?.error?.message || "An unexpected error occurred.";
-        console.log("Login failed:", errorMessage);
-        alert(errorMessage);
-      }
     );
     
   }

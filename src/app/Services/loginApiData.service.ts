@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Utils } from '../Shared/Utils';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -9,13 +9,13 @@ import { CryptoService } from './crypto.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ApiDataService {
+export class LoginApiDataService {
   constructor(private http: HttpClient, private cryptoService: CryptoService) {}
 
-  postAuth(data: any, path: any): Observable<any> {
+  postNoAuth(data: any, path: any): Observable<any> {
     const encryptedData = this.cryptoService.encrypt(data);
     const url = constants.BASE_URL + `${path}`;
-    return this.http.post(url,{ headers: Utils.getHeader()}, encryptedData).pipe(
+    return this.http.post(url, encryptedData).pipe(
       map((response: any) => {
         if (response.success && response.encdata) {
           return this.cryptoService.decrypt(response.encdata);
@@ -25,11 +25,11 @@ export class ApiDataService {
         }
       })
     );
-  }  
+  } 
 
-  getAuth(queryParams: any, path: any): Observable<any> {
+  getNoAuth(path:any){
     const url = constants.BASE_URL + `${path}`;
-    return this.http.get(url, { headers: Utils.getHeader(), params: queryParams }).pipe(
+    return this.http.get(url,).pipe(
       map((response: any) => {
         if (response.success && response.encdata) {
           return this.cryptoService.decrypt(response.encdata);
@@ -39,6 +39,5 @@ export class ApiDataService {
       })
     );
   }
-
-
+      
 }
