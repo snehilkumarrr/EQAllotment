@@ -5,7 +5,21 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/">Home</a>
         </li>
+        <ng-container *ngIf="beforeLogout">
+                  <li class="nav-item">
+          <span class="nav-link">Welcome, {{ userName }}</span>
+        </li>
+        </ng-container>
+
       </ul>
     </div>
+    <ng-container *ngIf="beforeLogout">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" (click)="logoutFunction()">Logout</a>
+        </li>
+      </ul>
+    </ng-container>
+
   </div>
 </nav>

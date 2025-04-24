@@ -15,7 +15,6 @@ import { CryptoService } from 'src/app/Services/crypto.service';
   styleUrls: ['./login.component.css', '../../Shared/shared_card_styles.css']
 })
 export class LoginComponent {
-  loginResponse: any;
   captchaImage:any;
   uuid:any;
   loginForm: FormGroup = new FormGroup({
@@ -37,24 +36,20 @@ export class LoginComponent {
   }
 
   getCaptcha(){
-    this.apiDataservice.getNoAuthNoParam( constants.api.noAuthCaptcha).subscribe(
-      (response: any) => {
-        if (response.success) {
-       
-          const decyptedData = this.cryptoService.decrypt(response.encdata);
-          this.captchaImage = decyptedData.captchaImage
-          this.uuid =decyptedData.uuid
-
-        }
+    this.apiDataservice.getNoAuth(null, constants.api.noAuthCaptcha).subscribe({
+      next: (response: any) => {
+        this.captchaImage = response.captchaImage
+        this.uuid =response.uuid
+         
       },
-      (error) => {
-        console.error("--error response--", error);
-        const errorMessage = error?.error?.message || "An unexpected error occurred.";
-        console.log("Login failed:", errorMessage);
-        alert(errorMessage);
+      error: (err) => {
+        console.error("🚨 Error from API:", err);
+        alert("Something went wrong while fetching data.");
       }
-    );
+    });
   }
+
+
 
   onSubmit() {
 
@@ -77,8 +72,7 @@ export class LoginComponent {
 
     this.apiDataservice.postAuth(formData, constants.api.loginwithcaptcha).subscribe(
       (response: any) => {
-        if (response.success) {
-       
+
           const decyptedData = this.cryptoService.decrypt(response.encdata);
           this.sharedDataService.setCaptachEncryptionData(decyptedData);
 
@@ -91,14 +85,7 @@ export class LoginComponent {
             }
           });       
 
-        }
       },
-      (error) => {
-        console.error("--error response--", error);
-        const errorMessage = error?.error?.message || "An unexpected error occurred.";
-        console.log("Login failed:", errorMessage);
-        alert(errorMessage);
-      }
     );
     
   }
