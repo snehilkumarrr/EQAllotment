@@ -58,22 +58,19 @@ export class OtpPageComponent {
 
 
 
-         this.apiDataservice.postAuth(formData,constants.api.otpValidate).subscribe(
-          (response: any) => {
-            if (response.success) {
-              const captchaDecyptedData = this.cryptoService.decrypt(response.encdata);
-              this.sharedDataService.setloginUserData(captchaDecyptedData);
-              localStorage.setItem("accessToken",captchaDecyptedData.accessToken)
-              this.router.navigate(['/apply-quota']);   
+    this.apiDataservice.postAuth(formData, constants.api.otpValidate).subscribe({
+      next: (response: any) => {
 
-            }
-          },
-          (error) => {
-            console.error("--error response--", error);
-            const errorMessage = error?.error?.message || "An unexpected error occurred.";
-            console.log("Login failed:", errorMessage);
-            alert(errorMessage);
-          }
-        );
+          this.sharedDataService.setloginUserData(response);
+          localStorage.setItem("accessToken", response.accessToken);
+          this.router.navigate(['/apply-quota']);
+        
+      },
+      error: (err) => {
+        console.error("Request failed:", err);
+        alert(err.error?.message || "Unexpected error");
+      }
+    });
+    
   }
 }
