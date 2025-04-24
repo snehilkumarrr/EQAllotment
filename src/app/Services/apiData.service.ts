@@ -19,12 +19,6 @@ export class ApiDataService {
     return this.http.post(url, encryptedData, { headers: Utils.getHeader() });
   }
 
-  // fetchUserHistory - returns encrypted data as Observable
-  fetchUserHistory(data: any): Observable<any> {
-    const encryptedData = this.cryptoService.encrypt(data);
-    console.log("encryptedData: " + encryptedData);
-    return of(encryptedData);
-  }
 
   // getNoAuth with decryption handling
   getNoAuth(queryParams: any, path: any): Observable<any> {

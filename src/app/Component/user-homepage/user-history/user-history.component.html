@@ -1,23 +1,70 @@
-<title>User History</title>
 <div class="container mt-4">
-    <h3>User History</h3>
-    <table class="table table-bordered table-striped table-hover">
-      <thead class="thead-dark">
-        <tr>
-          <th>S. N0.</th>
-          <th>Name</th>
-          <th>Action</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of userHistory">
-          <td>{{ user.id }}</td>
-          <td>{{ user.name }}</td>
-          <td>{{ user.action }}</td>
-          <td>{{ user.date }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <input
+      type="text"
+      class="form-control w-25"
+      placeholder="Search EQ Request No or PNR"
+      [(ngModel)]="searchTerm"
+    />
+    <button class="btn btn-outline-primary" (click)="exportToCSV()">Export CSV</button>
   </div>
-  
+
+  <ngx-datatable
+    class="bootstrap shadow rounded"
+    [rows]="filteredUserHistory"
+    [columns]="columns"
+    [columnMode]="'force'"
+    [headerHeight]="50"
+    [footerHeight]="50"
+    [rowHeight]="'auto'"
+    [limit]="10"
+  >
+    <ngx-datatable-column name="EQ Request No.">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.eqRequestNo }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="PNR">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.pnr }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Total Passengers">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.totalPassengers }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Requested Passengers">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.requestPassengers }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Accepted Passengers">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.acceptedPassengers }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Current Status">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <span class="badge" [ngClass]="{
+          'bg-success': row.currentStatus === 'Approved',
+          'bg-danger': row.currentStatus === 'Rejected',
+          'bg-warning text-dark': row.currentStatus === 'Pending'
+        }">
+          {{ row.currentStatus }}
+        </span>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="Created On">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.createdOn | date: 'mediumDate' }}
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+</div>

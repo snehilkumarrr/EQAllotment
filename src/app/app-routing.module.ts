@@ -6,6 +6,7 @@ import { UserHistoryComponent } from './Component/user-homepage/user-history/use
 
 import { OtpPageComponent } from './Component/otp-page/otp-page.component';
 
+
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'apply-quota', component: ApplyQuotaComponent },
@@ -16,6 +17,7 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
+  
 })
 
 export class AppRoutingModule { }
