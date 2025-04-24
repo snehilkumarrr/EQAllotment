@@ -1,11 +1,12 @@
 <div class="form-container container py-5">
   <div class="row justify-content-center mt-5">
-    <div class="col-md-10"> <!-- Increased width to fit table -->
+    <div class="col-md-10">
       <div class="custom-card">
         <div class="card-header d-flex justify-content-center align-items-center">
-          Apply Quota
+          Check PNR For Quota
         </div>
         <div class="card-body">
+          <!-- First Form (PNR Input) -->
           <form [formGroup]="quotaForm" (ngSubmit)="onSubmit()">
             <div class="form-group">
               <label for="quotaInput">PNR Number</label>
@@ -25,10 +26,9 @@
                 Please enter a valid 10-digit PNR Number.
               </small>
             </div>
-
             <div class="d-flex justify-content-center mt-3">
-              <button type="submit" class="btn btn-primary" [disabled]="quotaForm.invalid">
-                Apply Quota
+              <button type="submit" class="btn btn-primary" [disabled]="quotaForm.get('quota')?.invalid">
+                Check PNR
               </button>
             </div>
           </form>
@@ -36,58 +36,98 @@
           <!-- Report Section -->
           <div class="mt-4">
             <ng-container *ngIf="personReport; else noData">
-              <!-- Existing Quota Report Table -->
-<h5 class="text-center mb-3">Quota Report</h5>
-<table class="table table-bordered text-center">
-  <thead class="custom-table-header">
-    <tr>
-      <th>PNR Number</th>
-      <th>Train Name</th>
-      <th>Train Number</th>
-      <th>Date of Journey</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>{{ personReport.pnrNumber }}</td>
-      <td>{{ personReport.trainName }}</td>
-      <td>{{ personReport.trainNumber }}</td>
-      <td>{{ personReport.dateOfJourney }}</td>
-    </tr>
-  </tbody>
-</table>
-<div class="mt-4" *ngIf="personReport.passengerList?.length">
-  <h5 class="text-center mb-3">Passenger Details</h5>
-  <table class="table table-bordered text-center">
-    <thead class="custom-table-header">
-      <tr>
-        <th>S. No.</th>
-        <th>Passenger Name</th>
-        <th>Age</th>
-        <th>Gender</th>
-        <th>Booking Status (Coach No, Berth No, Quota)</th>
-        <th>Current Status (Coach No, Berth No)</th>
-       
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let passenger of personReport.passengerList; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ passenger.passengerName }}</td>
-        <td>{{ passenger.passengerAge }}</td>
-        <td>{{ passenger.passengerGender }}</td>
-        <td>{{ passenger.bookingStatusDetails }}</td>
-        <td>{{ passenger.currentStatusDetails }}</td>
-       
-      </tr>
-    </tbody>
-  </table>
-</div>
+              <!-- Quota Report Table -->
+              <h5 class="text-center mb-3">Quota Report</h5>
+              <table class="table table-bordered text-center">
+                <thead class="custom-table-header">
+                  <tr>
+                    <th>PNR Number</th>
+                    <th>Train Name</th>
+                    <th>Train Number</th>
+                    <th>Date of Journey</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ personReport.pnrNumber }}</td>
+                    <td>{{ personReport.trainName }}</td>
+                    <td>{{ personReport.trainNumber }}</td>
+                    <td>{{ personReport.dateOfJourney }}</td>
+                  </tr>
+                </tbody>
+              </table>
 
+              <!-- Passenger Details Table -->
+              <div class="mt-4" *ngIf="personReport.passengerList?.length">
+                <h5 class="text-center mb-3">Passenger Details</h5>
+                <table class="table table-bordered text-center">
+                  <thead class="custom-table-header">
+                    <tr>
+                      <th>S. No.</th>
+                      <th>Passenger Name</th>
+                      <th>Age</th>
+                      <th>Gender</th>
+                      <th>Booking Status (Coach No, Berth No, Quota)</th>
+                      <th>Current Status (Coach No, Berth No)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let passenger of personReport.passengerList; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ passenger.passengerName }}</td>
+                      <td>{{ passenger.passengerAge }}</td>
+                      <td>{{ passenger.passengerGender }}</td>
+                      <td>{{ passenger.bookingStatusDetails }}</td>
+                      <td>{{ passenger.currentStatusDetails }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Additional Inputs Section -->
+              <form [formGroup]="quotaForm" (ngSubmit)="submitQuotaRequest()">
+                <div class="row mt-4">
+                  <div class="col-md-6">
+                    <label for="numPassengers">No. of Passengers <span class="text-danger">*</span></label>
+                    <select
+                      id="numPassengers"
+                      class="form-control"
+                      formControlName="noOfPassengers"
+                    >
+                      <option value="" disabled selected hidden>Select</option>
+                      <option
+                        *ngFor="let num of [].constructor(personReport.passengerList.length); let i = index"
+                        [value]="i + 1"
+                      >
+                        {{ i + 1 }}
+                      </option>
+                    </select>
+                    <small *ngIf="noOfPassengers?.invalid && noOfPassengers?.touched" class="text-danger">
+                      Please select number of passengers.
+                    </small>
+                  </div>
+                  <div class="col-md-6">
+                    <label for="remarks">Remarks</label>
+                    <input
+                      type="text"
+                      id="remarks"
+                      class="form-control"
+                      placeholder="Enter remarks (optional)"
+                      formControlName="remarks"
+                    />
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-center mt-4">
+                  <button type="submit" class="btn btn-success" [disabled]="quotaForm.get('noOfPassengers')?.invalid">
+                    Submit
+                  </button>
+                </div>
+              </form>
             </ng-container>
 
             <ng-template #noData>
-              <div *ngIf="quotaForm.touched" class="alert alert-warning text-center mt-3">
+              <div *ngIf="quotaForm.get('quota')?.touched" class="alert alert-warning text-center mt-3">
                 No data found for the given PNR.
               </div>
             </ng-template>
