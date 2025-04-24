@@ -61,7 +61,7 @@ export class ApplyQuotaComponent {
 
     const payload = {
       pnr: this.quotaForm.value.quota,
-      noOfPassengers: this.quotaForm.value.noOfPassengers,
+      requestPassengers: this.quotaForm.value.noOfPassengers,
       remarks: this.quotaForm.value.remarks
     };
 
