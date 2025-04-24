@@ -36,7 +36,7 @@ export class ApplyQuotaComponent {
       pnr: this.quotaForm.value.quota
     };
 
-    this.apiService.getNoAuth(requestData, constants.api.authPnr).subscribe({
+    this.apiService.getAuth(requestData, constants.api.authPnr).subscribe({
       next: (response: any) => {
         console.log("🔐 Raw response:", response);
         console.log("---sucssess--" + response.success)
