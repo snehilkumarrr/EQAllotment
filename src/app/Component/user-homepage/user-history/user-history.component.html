@@ -1,0 +1,23 @@
+<title>User History</title>
+<div class="container mt-4">
+    <h3>User History</h3>
+    <table class="table table-bordered table-striped table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>S. N0.</th>
+          <th>Name</th>
+          <th>Action</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of userHistory">
+          <td>{{ user.id }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.action }}</td>
+          <td>{{ user.date }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

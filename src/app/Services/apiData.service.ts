@@ -15,9 +15,17 @@ export class ApiDataService {
   postLogin( data:any) {
 
     const encryptedData = this.cryptoService.encrypt(data);
+    
      const url = constants.BASE_URL + `/user/`;
      console.log("ecnryptedData" + encryptedData);
      return this.http.post(url, encryptedData, { headers: Utils.getHeader() })
   }
-      
+
+  // new api call GET
+
+  fetchUserHistory(data: any): Observable<any> {
+    const encryptedData = this.cryptoService.encrypt(data);
+    console.log("ecnryptedData" + encryptedData);
+    return of(encryptedData);   
+  }
 }
