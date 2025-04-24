@@ -11,7 +11,6 @@ import * as constants from 'src/app/Shared/constants';
 })
 export class ApplyQuotaComponent {
   quotaForm: FormGroup;
-  additionalForm: FormGroup; // ✅ New form for dropdown and remarks
   personReport: any = null;
 
   constructor(
@@ -20,18 +19,15 @@ export class ApplyQuotaComponent {
     private cryptoService: CryptoService
   ) {
     this.quotaForm = this.fb.group({
-      quota: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]]
-    });
-
-    this.additionalForm = this.fb.group({
-      numPassengers: ['', Validators.required],
-      remarks: [''] // Optional field
+      quota: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      noOfPassengers: ['', Validators.required],
+      remarks: ['']
     });
   }
 
   onSubmit() {
-    if (this.quotaForm.invalid) {
-      this.quotaForm.markAllAsTouched();
+    if (this.quotaForm.get('quota')?.invalid) {
+      this.quotaForm.get('quota')?.markAsTouched();
       return;
     }
 
@@ -43,8 +39,12 @@ export class ApplyQuotaComponent {
       next: (response: any) => {
         console.log("Raw response:", response);
         this.personReport = response;
-        // Reset and enable the additional form
-        this.additionalForm.reset();
+
+        // Reset the additional fields
+        this.quotaForm.patchValue({
+          noOfPassengers: '',
+          remarks: ''
+        });
       },
       error: (err) => {
         console.error("🚨 Error from API:", err);
@@ -53,25 +53,39 @@ export class ApplyQuotaComponent {
     });
   }
 
-  // ✅ Handle submit for dropdown + remarks form
-  onAdditionalSubmit() {
-    if (this.additionalForm.invalid) {
-      this.additionalForm.markAllAsTouched();
+  submitQuotaRequest() {
+    if (this.quotaForm.get('noOfPassengers')?.invalid) {
+      this.quotaForm.get('noOfPassengers')?.markAsTouched();
       return;
     }
 
-    const selectedPassengers = this.additionalForm.value.numPassengers;
-    const remarks = this.additionalForm.value.remarks;
+    const payload = {
+      pnr: this.quotaForm.value.quota,
+      noOfPassengers: this.quotaForm.value.noOfPassengers,
+      remarks: this.quotaForm.value.remarks
+    };
 
-    console.log("🚀 Additional form submitted:");
-    console.log("Selected No. of Passengers:", selectedPassengers);
-    console.log("Remarks:", remarks);
-
-    // TODO: Send this data to backend or handle as needed
-    alert(`Submitted:\nNo. of Passengers: ${selectedPassengers}\nRemarks: ${remarks}`);
+    this.apiService.postAuth(payload, constants.api.saveEqRequest).subscribe({
+      next: (res) => {
+        console.log("Quota request submitted successfully:", res);
+        alert("Quota request submitted successfully.");
+      },
+      error: (err) => {
+        console.error("🚨 Error submitting quota request:", err);
+        alert("Something went wrong while submitting the quota request.");
+      }
+    });
   }
 
   get quota() {
     return this.quotaForm.get('quota');
+  }
+
+  get noOfPassengers() {
+    return this.quotaForm.get('noOfPassengers');
+  }
+
+  get remarks() {
+    return this.quotaForm.get('remarks');
   }
 }
