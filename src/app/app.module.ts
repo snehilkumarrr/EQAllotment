@@ -17,6 +17,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { NoSpecialCharsDirective } from './Directive/no-special-chars.directive';
 import { OtpPageComponent } from './Component/otp-page/otp-page.component';
 import { UserHistoryComponent } from './Component/user-homepage/user-history/user-history.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { UserHistoryComponent } from './Component/user-homepage/user-history/use
     AppRoutingModule,
     NgbModule,
     ReactiveFormsModule,
-    HttpClientModule 
+    HttpClientModule,
+    NgxPaginationModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

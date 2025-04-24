@@ -15,6 +15,15 @@
               <label for="password" class="form-label">Password</label>
               <input type="password" class="form-control" id="password" formControlName="password" placeholder="Enter your password">
             </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Captcha</label>
+              <img [src]="captchaImageFn" alt="CAPTCHA" class="captcha-img"/>
+              <span class="refresh-icon" (click)="getCaptcha()" title="Refresh Captcha">🔄</span>
+            </div>
+            <div class="mb-3">
+              <label for="captcha" class="form-label">Enter above captcha</label>
+              <input type="captcha" class="form-control" id="captcha" formControlName="captcha" placeholder="Enter your captcha">
+            </div>
             <div *ngIf="loginForm.get('username')?.errors?.['noSpecialChars']">
               Special characters like &#64;, #, $, % are not allowed.
             </div>

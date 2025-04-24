@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Utils } from '../Shared/Utils';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import * as constants from '../Shared/constants';
 import { CryptoService } from './crypto.service';
 
@@ -9,23 +10,39 @@ import { CryptoService } from './crypto.service';
   providedIn: 'root'
 })
 export class ApiDataService {
+  constructor(private http: HttpClient, private cryptoService: CryptoService) {}
 
-  constructor(private http: HttpClient, private cryptoService : CryptoService) { }
-
-  postLogin( data:any) {
-
+  postAuth(data: any, path: any) {
     const encryptedData = this.cryptoService.encrypt(data);
-    
-     const url = constants.BASE_URL + `/user/`;
-     console.log("ecnryptedData" + encryptedData);
-     return this.http.post(url, encryptedData, { headers: Utils.getHeader() })
+    const url = constants.BASE_URL + `/user/`;
+    console.log("encryptedData: " + encryptedData);
+    return this.http.post(url, encryptedData, { headers: Utils.getHeader() });
   }
 
-  // new api call GET
-
+  // fetchUserHistory - returns encrypted data as Observable
   fetchUserHistory(data: any): Observable<any> {
     const encryptedData = this.cryptoService.encrypt(data);
-    console.log("ecnryptedData" + encryptedData);
-    return of(encryptedData);   
+    console.log("encryptedData: " + encryptedData);
+    return of(encryptedData);
+  }
+
+  // getNoAuth with decryption handling
+  getNoAuth(queryParams: any, path: any): Observable<any> {
+    const url = constants.BASE_URL + `${path}`;
+    return this.http.get(url, { headers: Utils.getHeader(), params: queryParams }).pipe(
+      map((response: any) => {
+        if (response.success && response.encdata) {
+          return this.cryptoService.decrypt(response.encdata);
+        } else {
+          throw new Error('API call failed or missing encrypted data');
+        }
+      })
+    );
+  }
+
+  // GET method without params or headers
+  getNoAuthNoParam(path: any) {
+    const url = constants.BASE_URL + `${path}`;
+    return this.http.get(url);
   }
 }
