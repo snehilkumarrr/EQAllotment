@@ -6,6 +6,7 @@ import { CryptoService } from 'src/app/Services/crypto.service';
 import { SharedDataService } from 'src/app/Services/sharedData.service';
 import { ActivatedRoute } from '@angular/router';
 import * as constants from '../../Shared/constants';
+import { LoginApiDataService } from 'src/app/Services/loginApiData.service';
 
 @Component({
   selector: 'app-otp-page',
@@ -23,7 +24,7 @@ export class OtpPageComponent {
     otp: new FormControl(''),
   });
 
-  constructor(private router: Router, private apiDataservice: ApiDataService, private sharedDataService: SharedDataService,
+  constructor(private router: Router, private loginApiDataservice: LoginApiDataService, private sharedDataService: SharedDataService,
     private cryptoService: CryptoService, private route: ActivatedRoute
   ) {
   }
@@ -58,7 +59,7 @@ export class OtpPageComponent {
 
 
 
-    this.apiDataservice.postAuth(formData, constants.api.otpValidate).subscribe({
+    this.loginApiDataservice.postNoAuth(formData, constants.api.otpValidate).subscribe({
       next: (response: any) => {
 
           this.sharedDataService.setloginUserData(response);

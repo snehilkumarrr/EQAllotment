@@ -7,6 +7,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ApiDataService } from 'src/app/Services/apiData.service';
 import { SharedDataService } from 'src/app/Services/sharedData.service';
 import { CryptoService } from 'src/app/Services/crypto.service';
+import { LoginApiDataService } from 'src/app/Services/loginApiData.service';
 // import { HeaderDataService } from 'src/app/Services/headerData.service';
 
 @Component({
@@ -23,7 +24,7 @@ export class LoginComponent {
     captcha: new FormControl('')
   });
 
-  constructor(private router: Router, private apiDataservice: ApiDataService, private cryptoService:CryptoService,
+  constructor(private router: Router, private loginApiDataservice: LoginApiDataService, private cryptoService:CryptoService,
     private sharedDataService: SharedDataService
   ) {}
 
@@ -36,7 +37,7 @@ export class LoginComponent {
   }
 
   getCaptcha(){
-    this.apiDataservice.getNoAuth(null, constants.api.noAuthCaptcha).subscribe({
+    this.loginApiDataservice.getNoAuth( constants.api.noAuthCaptcha).subscribe({
       next: (response: any) => {
         this.captchaImage = response.captchaImage
         this.uuid =response.uuid
@@ -70,11 +71,9 @@ export class LoginComponent {
     console.log("==---form====" + JSON.stringify(formData))
 
 
-    this.apiDataservice.postAuth(formData, constants.api.loginwithcaptcha).subscribe(
+    this.loginApiDataservice.postNoAuth(formData, constants.api.loginwithcaptcha).subscribe(
       (response: any) => {
-
-          const decyptedData = this.cryptoService.decrypt(response.encdata);
-          this.sharedDataService.setCaptachEncryptionData(decyptedData);
+          this.sharedDataService.setCaptachEncryptionData(response);
 
           this.router.navigate(['/otp-page'], {
             state: {
