@@ -11,6 +11,7 @@ import * as constants from 'src/app/Shared/constants';
 })
 export class ApplyQuotaComponent {
   quotaForm: FormGroup;
+  additionalForm: FormGroup; // ✅ New form for dropdown and remarks
   personReport: any = null;
 
   constructor(
@@ -19,10 +20,12 @@ export class ApplyQuotaComponent {
     private cryptoService: CryptoService
   ) {
     this.quotaForm = this.fb.group({
-      quota: [
-        '',
-        [Validators.required, Validators.pattern(/^\d{10}$/)]
-      ]
+      quota: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]]
+    });
+
+    this.additionalForm = this.fb.group({
+      numPassengers: ['', Validators.required],
+      remarks: [''] // Optional field
     });
   }
 
@@ -38,18 +41,34 @@ export class ApplyQuotaComponent {
 
     this.apiService.getNoAuth(requestData, constants.api.authPnr).subscribe({
       next: (response: any) => {
-        console.log("🔐 Raw response:", response);
-        console.log("---sucssess--" + response.success)
-        
-            this.personReport = response; // Save to show in the table
-            // alert("Data is"+JSON.stringify(this.personReport)) ;
-         
+        console.log("Raw response:", response);
+        this.personReport = response;
+        // Reset and enable the additional form
+        this.additionalForm.reset();
       },
       error: (err) => {
         console.error("🚨 Error from API:", err);
         alert("Something went wrong while fetching data.");
       }
     });
+  }
+
+  // ✅ Handle submit for dropdown + remarks form
+  onAdditionalSubmit() {
+    if (this.additionalForm.invalid) {
+      this.additionalForm.markAllAsTouched();
+      return;
+    }
+
+    const selectedPassengers = this.additionalForm.value.numPassengers;
+    const remarks = this.additionalForm.value.remarks;
+
+    console.log("🚀 Additional form submitted:");
+    console.log("Selected No. of Passengers:", selectedPassengers);
+    console.log("Remarks:", remarks);
+
+    // TODO: Send this data to backend or handle as needed
+    alert(`Submitted:\nNo. of Passengers: ${selectedPassengers}\nRemarks: ${remarks}`);
   }
 
   get quota() {

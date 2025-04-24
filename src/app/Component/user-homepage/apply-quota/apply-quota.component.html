@@ -3,7 +3,7 @@
     <div class="col-md-10"> <!-- Increased width to fit table -->
       <div class="custom-card">
         <div class="card-header d-flex justify-content-center align-items-center">
-          Apply Quota
+          <h5 class="text-center mb-3">Check PNR For Quota</h5>  
         </div>
         <div class="card-body">
           <form [formGroup]="quotaForm" (ngSubmit)="onSubmit()">
@@ -28,7 +28,7 @@
 
             <div class="d-flex justify-content-center mt-3">
               <button type="submit" class="btn btn-primary" [disabled]="quotaForm.invalid">
-                Apply Quota
+                Check PNR
               </button>
             </div>
           </form>
@@ -91,6 +91,51 @@
                 No data found for the given PNR.
               </div>
             </ng-template>
+          </div>
+          
+          <div *ngIf="personReport?.passengerList?.length" class="mt-4">
+            <form [formGroup]="additionalForm" (ngSubmit)="onAdditionalSubmit()" class="mt-4">
+              <div class="card-header d-flex justify-content-center align-items-center">
+                <h5 class="text-center mb-3">Apply Quota</h5> 
+              </div>
+              <div class="form-group">
+                <label for="numPassengers"> Select No. of Passengers</label>
+                <select
+                  id="numPassengers"
+                  class="form-control"
+                  formControlName="numPassengers"
+                >
+                  
+                  <option
+                    *ngFor="let passenger of personReport.passengerList; let i = index"
+                    [value]="i + 1"
+                  >
+                    {{ i + 1 }}
+                  </option>
+                </select>
+                <small *ngIf="additionalForm.get('numPassengers')?.touched && additionalForm.get('numPassengers')?.invalid" class="text-danger">
+                  Please select number of passengers.
+                </small>
+              </div>
+            
+              <div class="form-group mt-3">
+                <label for="remarks">Remarks</label>
+                <input
+                  type="text"
+                  id="remarks"
+                  formControlName="remarks"
+                  class="form-control"
+                  placeholder="Enter any remarks (optional)"
+                />
+              </div>
+            
+              <div class="text-center mt-3">
+                <button class="btn btn-success" type="submit">
+                  Submit
+                </button>
+              </div>
+            </form>
+            
           </div>
         </div>
       </div>
