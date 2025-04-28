@@ -19,16 +19,15 @@ export class ApplyQuotaComponent {
     private cryptoService: CryptoService
   ) {
     this.quotaForm = this.fb.group({
-      quota: [
-        '',
-        [Validators.required, Validators.pattern(/^\d{10}$/)]
-      ]
+      quota: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
+      noOfPassengers: ['', Validators.required],
+      remarks: ['']
     });
   }
 
   onSubmit() {
-    if (this.quotaForm.invalid) {
-      this.quotaForm.markAllAsTouched();
+    if (this.quotaForm.get('quota')?.invalid) {
+      this.quotaForm.get('quota')?.markAsTouched();
       return;
     }
 
@@ -38,12 +37,14 @@ export class ApplyQuotaComponent {
 
     this.apiService.getAuth(requestData, constants.api.authPnr).subscribe({
       next: (response: any) => {
-        console.log("🔐 Raw response:", response);
-        console.log("---sucssess--" + response.success)
-        
-            this.personReport = response; // Save to show in the table
-            // alert("Data is"+JSON.stringify(this.personReport)) ;
-         
+        console.log("Raw response:", response);
+        this.personReport = response;
+
+        // Reset the additional fields
+        this.quotaForm.patchValue({
+          noOfPassengers: '',
+          remarks: ''
+        });
       },
       error: (err) => {
         console.error("🚨 Error from API:", err);
@@ -52,7 +53,39 @@ export class ApplyQuotaComponent {
     });
   }
 
+  submitQuotaRequest() {
+    if (this.quotaForm.get('noOfPassengers')?.invalid) {
+      this.quotaForm.get('noOfPassengers')?.markAsTouched();
+      return;
+    }
+
+    const payload = {
+      pnr: this.quotaForm.value.quota,
+      requestPassengers: this.quotaForm.value.noOfPassengers,
+      remarks: this.quotaForm.value.remarks
+    };
+
+    this.apiService.postAuth(payload, constants.api.saveEqRequest).subscribe({
+      next: (res) => {
+        console.log("Quota request submitted successfully:", res);
+        alert("Quota request submitted successfully.");
+      },
+      error: (err) => {
+        console.error("🚨 Error submitting quota request:", err);
+        alert("Something went wrong while submitting the quota request.");
+      }
+    });
+  }
+
   get quota() {
     return this.quotaForm.get('quota');
+  }
+
+  get noOfPassengers() {
+    return this.quotaForm.get('noOfPassengers');
+  }
+
+  get remarks() {
+    return this.quotaForm.get('remarks');
   }
 }

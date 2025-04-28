@@ -50,3 +50,6 @@
     background-color: #5f90d7; /* Bootstrap primary blue */
     color: #ffffff;  
   }
+  select.form-control {
+    appearance: auto; /* Show dropdown arrow */
+  }

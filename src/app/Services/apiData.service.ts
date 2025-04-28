@@ -15,7 +15,7 @@ export class ApiDataService {
   postAuth(data: any, path: any): Observable<any> {
     const encryptedData = this.cryptoService.encrypt(data);
     const url = constants.BASE_URL + `${path}`;
-    return this.http.post(url,{ headers: Utils.getHeader()}, encryptedData).pipe(
+    return this.http.post(url, encryptedData,{ headers: Utils.getHeader()}).pipe(
       map((response: any) => {
         if (response.success && response.encdata) {
           return this.cryptoService.decrypt(response.encdata);
