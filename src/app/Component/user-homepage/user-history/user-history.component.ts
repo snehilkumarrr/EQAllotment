@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { ApiDataService } from 'src/app/Services/apiData.service';
 import { CryptoService } from 'src/app/Services/crypto.service';
 import * as constants from 'src/app/Shared/constants';
-import { UserHistoryDTO } from 'src/app/models/user-history.dto';
+import { UserHistoryDTO } from 'src/app/Model/user-history.dto';
 
 
 
@@ -14,9 +14,8 @@ import { UserHistoryDTO } from 'src/app/models/user-history.dto';
 })
 export class UserHistoryComponent implements OnInit {
   userHistory: UserHistoryDTO[] = [];
-  userID = 'ganesh';
   responseData: any = "";
-
+  historyType: string = "P";
   constructor(private apiDataservice: ApiDataService, private cryptoService: CryptoService, private apiService: ApiDataService) {}
 
   ngOnInit(): void {
@@ -24,30 +23,31 @@ export class UserHistoryComponent implements OnInit {
   }
 
   loadUserHistory(): void {
-    this.apiService.getNoAuthNoParam(constants.api.sendRequest).subscribe({
+    const HistoryQueryParam = {
+      status: this.historyType
+    };
+    
+    this.apiService.getAuth(HistoryQueryParam, constants.api.sendRequest).subscribe({
         next: (response: any) => {
-          console.log("Raw response:", response);
-          
-          if (response && response.success && response.encdata) {
-            const decrypted = this.cryptoService.decrypt(response.encdata);
-            console.log("Decrypted Data:", decrypted);
+          console.log("Decrypted data:", response);
             try {
-              const parsedData = JSON.parse(decrypted);
-              this.userHistory = parsedData as UserHistoryDTO[];
+              this.userHistory = response as UserHistoryDTO[];
             } catch (e) {
-              console.error("Failed to put data in the variable", e);
+              console.error("Failed to put data in the model", e);
               this.userHistory = [];
             }
-          } else {
-            console.warn("Response missing encdata");
-            this.userHistory = [];
-          }
+          
         },
         error: (err) => {
           console.error("Response error occured", err);
-          alert("Something went wrong while fetching data.");
+          alert("error in the user-history api");
         }
       }
     );
  }
+ onHistoryTypeChange(type: string): void {
+  console.log("before value" + this.historyType);
+  this.historyType = type;
+  this.loadUserHistory();
+}
 }

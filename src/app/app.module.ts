@@ -18,7 +18,7 @@ import { NoSpecialCharsDirective } from './Directive/no-special-chars.directive'
 import { OtpPageComponent } from './Component/otp-page/otp-page.component';
 import { UserHistoryComponent } from './Component/user-homepage/user-history/user-history.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -37,9 +37,11 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     BrowserModule,
     AppRoutingModule,
     NgbModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     NgxPaginationModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

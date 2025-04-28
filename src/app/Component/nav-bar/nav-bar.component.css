@@ -5,3 +5,8 @@
 .nav-link{
   color: white
 }
+
+.navbar-nav .nav-link {
+  color: #000 !important;
+  display: block !important;
+}
