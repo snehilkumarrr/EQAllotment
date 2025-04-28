@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Utils } from '../Shared/Utils';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -41,5 +41,4 @@ export class ApiDataService {
   }
 
 
-      
 }

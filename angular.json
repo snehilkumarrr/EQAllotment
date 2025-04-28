@@ -88,11 +88,15 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.css",
+              "node_modules/datatables.net-dt/css/jquery.dataTables.css",
               "src/styles.css"
 
             ],
             "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/datatables.net/js/jquery.dataTables.js"
             ]
           }
         }
@@ -100,6 +104,7 @@
     }
   },
   "cli": {
-    "analytics": "ffd80230-fa6d-4e2e-9bb4-b4a5d7751a1f"
+    "analytics": false
   }
+  
 }
