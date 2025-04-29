@@ -30,6 +30,9 @@ constructor(private router: Router, private apiDataservice: ApiDataService, priv
 }
 
 ngOnInit(){
+  const state = window.history.state;
+
+  this.requestId = state.id;
   this.loadUserRequest()
   this.loadZone()
 }
@@ -71,7 +74,6 @@ fetchDivison(zoneId:any){
   );
 }
 loadUserRequest(){
-  this.requestId="2"
   const id ={
     id:this.requestId
   }

@@ -68,8 +68,12 @@ loadUserHistory(): void {
   this.historyType = type;
   this.loadUserHistory();
 }
-takeAction(id: number): void {
-  console.log('Take action clicked for ID:', id);
+takeAction(id: any): void {
+  this.router.navigate(['/rb-admin'], {
+    state: {
+      id: id,
+    }
+  });      
 }
 
 }
