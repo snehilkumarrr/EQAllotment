@@ -1,12 +1,41 @@
-.navbar{
-  background-color: #33658a;
+/* Navbar */
+.navbar {
+  background-color: #5d7084; 
+  border-bottom: 1px solid #4a5a6a; 
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.nav-link{
-  color: white
+/* Navbar brand (logo or text) */
+.navbar-brand {
+  color: #ffffff !important;
+  font-weight: bold;
+  font-size: 1.5rem;
 }
 
+/* Navbar links */
 .navbar-nav .nav-link {
-  color: #000 !important;
-  display: block !important;
+  color: #f0f0f0 !important;
+  font-weight: 500;
+  margin: 0 12px;
+  transition: color 0.3s ease;
+}
+
+/* Hover effect */
+.navbar-nav .nav-link:hover {
+  color: #d1d8e0 !important; 
+  text-decoration: underline;
+}
+
+
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,0.9)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Mobile view */
+.navbar-collapse {
+  background-color: #5d7084;
 }

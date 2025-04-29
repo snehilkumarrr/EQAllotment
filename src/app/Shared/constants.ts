@@ -16,6 +16,9 @@ export const api = {
   "otpValidate" : "/noauth/otpvalidate",
   "authPnr": "/auth/mp/external/pnrEnquiry",
   "sendRequest": "/auth/mp/getAllSentRequests",
-  "saveEqRequest": "/auth/mp/saveEqRequest"
+  "saveEqRequest": "/auth/mp/saveEqRequest",
+  "AaSendRequest": "/auth/aa/getAllSentRequests",
+  "AaSaveEqRequest": "/auth/aa/saveEqRequest",
+  "AaTakeAction": "auth/aa/takeAction"
 };
   
