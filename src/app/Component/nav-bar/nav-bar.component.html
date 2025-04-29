@@ -20,26 +20,29 @@
         <li class="nav-item">
           <a class="nav-link active" routerLink="/">Home</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/apply-quota">apply quota</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/user-history">user histoy</a>
-        </li>
-        <ng-container *ngIf="beforeLogout">
+    
+        <!-- Show these only if loginResponse is NOT null -->
+        <ng-container *ngIf="loginResponse">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/apply-quota">Apply Quota</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/user-history">User History</a>
+          </li>
           <li class="nav-item">
             <span class="nav-link">Welcome, {{ userName }}</span>
           </li>
         </ng-container>
       </ul>
-
+    
       <ul class="navbar-nav">
-        <ng-container *ngIf="beforeLogout">
+        <!-- Logout button shown only if loginResponse is NOT null -->
+        <ng-container *ngIf="loginResponse">
           <li class="nav-item">
             <a class="nav-link" routerLink="/" (click)="logoutFunction()">Logout</a>
           </li>
         </ng-container>
       </ul>
-    </div>
+    </div>    
   </div>
 </nav>

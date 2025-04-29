@@ -22,6 +22,11 @@ export class NavBarComponent {
     this.sharedDataService.loginUserData.subscribe((loginResponse) => {
       if (loginResponse) {
         this.loginResponse = loginResponse;
+        // console.log("Username:", loginResponse.username);
+        // console.log("Email:", loginResponse.email);
+        // console.log("Mobile:", loginResponse.mobile);
+        // console.log("Authorities:", loginResponse.authorities[0]);
+        // console.log("Access Token:", loginResponse.accessToken);  
         if(this.loginResponse!=null){
           this.userName = this.loginResponse.username
           this.beforeLogout=true;
