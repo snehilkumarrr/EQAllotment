@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PersonReport } from 'src/app/Model/pnr-enquiry';
 import { ApiDataService } from 'src/app/Services/apiData.service';
 import { CryptoService } from 'src/app/Services/crypto.service';
 import * as constants from 'src/app/Shared/constants';
@@ -11,7 +12,10 @@ import * as constants from 'src/app/Shared/constants';
 })
 export class ApplyQuotaComponent {
   quotaForm: FormGroup;
-  personReport: any = null;
+  personReport: PersonReport| null = null;
+  isSubmitted: boolean = false; // Flag to track if the form has been submitted
+  errorMessage: string | null = null; // To store any error messages
+  successMessage: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -26,49 +30,64 @@ export class ApplyQuotaComponent {
   }
 
   onSubmit() {
+    this.isSubmitted = true;
+    this.successMessage = null; // clear success message on new PNR check
+  
     if (this.quotaForm.get('quota')?.invalid) {
       this.quotaForm.get('quota')?.markAsTouched();
       return;
     }
-
-    const requestData = {
-      pnr: this.quotaForm.value.quota
-    };
-
+  
+    const requestData = { pnr: this.quotaForm.value.quota };
+  
     this.apiService.getAuth(requestData, constants.api.authPnr).subscribe({
       next: (response: any) => {
-        console.log("Raw response:", response);
+        // You may need to adjust this condition based on your API's actual response structure
+        if (!response || !response.pnrNumber || response.passengerList?.length === 0) {
+          this.errorMessage = response.errorMessage;
+          this.personReport = null;
+          return;
+        }
+  
         this.personReport = response;
-
-        // Reset the additional fields
+        this.errorMessage = null;
+        this.successMessage = null; // in case it's still set
+  
+        // Reset additional form fields
         this.quotaForm.patchValue({
           noOfPassengers: '',
           remarks: ''
         });
       },
       error: (err) => {
-        console.error("🚨 Error from API:", err);
-        alert("Something went wrong while fetching data.");
+        this.errorMessage = err.error?.errorMessage || 'Something went wrong while fetching data.';
+        this.personReport = null;
       }
     });
   }
-
+  
   submitQuotaRequest() {
     if (this.quotaForm.get('noOfPassengers')?.invalid) {
       this.quotaForm.get('noOfPassengers')?.markAsTouched();
       return;
     }
-
+  
     const payload = {
       pnr: this.quotaForm.value.quota,
       requestPassengers: this.quotaForm.value.noOfPassengers,
       remarks: this.quotaForm.value.remarks
     };
-
+  
     this.apiService.postAuth(payload, constants.api.saveEqRequest).subscribe({
       next: (res) => {
         console.log("Quota request submitted successfully:", res);
-        alert("Quota request submitted successfully.");
+  
+        // Reset everything
+        this.quotaForm.reset();
+        this.personReport = null;
+        this.errorMessage = null;
+        this.successMessage = 'Your quota request was submitted successfully.';
+        this.isSubmitted = false;
       },
       error: (err) => {
         console.error("🚨 Error submitting quota request:", err);
@@ -76,6 +95,8 @@ export class ApplyQuotaComponent {
       }
     });
   }
+  
+
 
   get quota() {
     return this.quotaForm.get('quota');
