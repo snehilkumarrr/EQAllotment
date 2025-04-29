@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './Component/login/login.component';
@@ -16,11 +15,13 @@ import { CryptoService } from './Services/crypto.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NoSpecialCharsDirective } from './Directive/no-special-chars.directive';
 import { OtpPageComponent } from './Component/otp-page/otp-page.component';
-import { RbAdminHomepageComponent } from './Component/rb-admin/rb-admin-homepage/rb-admin-homepage.component';
+import { UserHistoryComponent } from './Component/user-homepage/user-history/user-history.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { FormsModule } from '@angular/forms';
+
 
 @NgModule({
-  declarations: [
+  declarations: [ 
     NoSpecialCharsDirective,
     AppComponent,
     LoginComponent,
@@ -29,12 +30,13 @@ import { NgxPaginationModule } from 'ngx-pagination';
     NavBarHomeComponent,
     ApplyQuotaComponent,
     OtpPageComponent,
-    RbAdminHomepageComponent
+    UserHistoryComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     NgxPaginationModule,

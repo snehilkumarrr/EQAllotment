@@ -15,5 +15,10 @@ export const api = {
   "loginwithcaptcha": "/noauth/loginwithcaptcha",
   "otpValidate" : "/noauth/otpvalidate",
   "authPnr": "/auth/mp/external/pnrEnquiry",
-  "saveEqRequest": "/auth/mp/saveEqRequest"
+  "sendRequest": "/auth/mp/getAllSentRequests",
+  "saveEqRequest": "/auth/mp/saveEqRequest",
+  "AaSendRequest": "/auth/aa/getAllSentRequests",
+  "AaSaveEqRequest": "/auth/aa/saveEqRequest",
+  "AaTakeAction": "auth/aa/takeAction"
 };
+  
