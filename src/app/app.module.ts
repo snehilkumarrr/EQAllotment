@@ -19,6 +19,7 @@ import { OtpPageComponent } from './Component/otp-page/otp-page.component';
 import { UserHistoryComponent } from './Component/user-homepage/user-history/user-history.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
+import { RbAdminHomepageComponent } from './Component/rb-admin/rb-admin-homepage/rb-admin-homepage.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { FormsModule } from '@angular/forms';
     NavBarHomeComponent,
     ApplyQuotaComponent,
     OtpPageComponent,
-    UserHistoryComponent
+    UserHistoryComponent,
+    RbAdminHomepageComponent
   ],
   imports: [
     BrowserModule,

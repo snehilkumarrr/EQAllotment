@@ -16,6 +16,10 @@ export const api = {
   "otpValidate" : "/noauth/otpvalidate",
   "authPnr": "/auth/mp/external/pnrEnquiry",
   "sendRequest": "/auth/mp/getAllSentRequests",
-  "saveEqRequest": "/auth/mp/saveEqRequest"
+  "saveEqRequest": "/auth/mp/saveEqRequest",
+  "getEqRequest" : "/auth/aa/getEQRequest",
+  "submitEqRequest" :"/auth/aa/takeAction",
+  "getAllZones":"/auth/basic/zones",
+  "getDivisionByCode":"/auth/basic/divbyzone"
 };
   
