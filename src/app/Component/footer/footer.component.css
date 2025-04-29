@@ -1,13 +1,24 @@
 .footer {
-  background-color: #33658a;
-  color: white;
-  bottom: 0;
+  background-color: #5d7084;
+  color: #ffffff; 
   width: 100%;
   text-align: center;
-  padding: 10px 0;
+  padding: 15px 0;
+  border-top: 1px solid #4a5a6a;
+  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1); 
 }
 
 .footer-content {
-  font-size: 20px;
+  font-size: 18px;
+  font-weight: 500;
   display: inline-block;
+  padding: 5px 20px;
+}
+
+/* Responsive footer text */
+@media (max-width: 600px) {
+  .footer-content {
+    font-size: 14px;
+    padding: 10px;
+  }
 }

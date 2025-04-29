@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './Component/login/login.component';
@@ -43,7 +42,6 @@ import { RbAdminHomepageComponent } from './Component/rb-admin/rb-admin-homepage
     ReactiveFormsModule,
     HttpClientModule,
     NgxPaginationModule,
-    
   ],
   providers: [],
   bootstrap: [AppComponent]

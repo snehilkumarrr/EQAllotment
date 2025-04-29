@@ -9,11 +9,15 @@ export interface UserHistoryDTO {
     trainNo: string;
     trainStartDate: string;
     jrnyDate: string;
-    totalPassengers: number;
+    totalPassengers: number; // remove it
     acceptedPassengers: number;
     currentStatus: string;
     requestTxns: RequestTxns; 
     createdOn: string;
-    modifiedOn :string
+    modifiedOn :string;
+    srcStation: string;
+    destStation: string;
+    mpName: string;
+    assignedToAuthority: string;
   }
   

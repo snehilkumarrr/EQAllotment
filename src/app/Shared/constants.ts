@@ -20,6 +20,9 @@ export const api = {
   "getEqRequest" : "/auth/aa/getEQRequest",
   "submitEqRequest" :"/auth/aa/takeAction",
   "getAllZones":"/auth/basic/zones",
-  "getDivisionByCode":"/auth/basic/divbyzone"
+  "getDivisionByCode":"/auth/basic/divbyzone",
+  "AaSendRequest": "/auth/aa/getAllSentRequests",
+  "AaSaveEqRequest": "/auth/aa/saveEqRequest",
+  "AaTakeAction": "auth/aa/takeAction"
 };
   
