@@ -5,7 +5,9 @@ body {
 .appbackground{
   background-color:var(--header-background);
 }
-
+.card-header{
+text-align:center
+}
 .apptitle{
   color:white; font-size:36px
   ; text-align: center; padding:10px;
