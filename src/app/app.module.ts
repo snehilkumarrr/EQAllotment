@@ -18,6 +18,8 @@ import { UserHistoryComponent } from './Component/user-homepage/user-history/use
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
 import { RbAdminHomepageComponent } from './Component/rb-admin/rb-admin-homepage/rb-admin-homepage.component';
+import { AlertToastComponent } from './Component/alert-toast/alert-toast.component';
+import { AlertToastModalComponent } from './Component/alert-toast-modal/alert-toast-modal.component';
 
 
 @NgModule({
@@ -30,7 +32,9 @@ import { RbAdminHomepageComponent } from './Component/rb-admin/rb-admin-homepage
     ApplyQuotaComponent,
     OtpPageComponent,
     UserHistoryComponent,
-    RbAdminHomepageComponent
+    RbAdminHomepageComponent,
+    AlertToastComponent,
+    AlertToastModalComponent,
   ],
   imports: [
     BrowserModule,
