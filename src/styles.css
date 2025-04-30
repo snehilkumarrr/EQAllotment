@@ -2,3 +2,10 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 
+:root {
+  --bs-font-sans-serif: Arial, sans-serif; 
+  --header-background: #003366; 
+  --secondary-color: #E6F0FF; 
+  --link-color: #4D4D4D;
+}
+
