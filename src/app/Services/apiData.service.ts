@@ -16,7 +16,7 @@ export class ApiDataService {
 fetchHeader(path: string)
 {
   var header={}
-    if(path.startsWith('auth'))
+    if(path.startsWith('/auth'))
     {
        header=Utils.getHeader();
     }
