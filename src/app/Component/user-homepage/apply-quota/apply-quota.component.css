@@ -57,7 +57,7 @@
   }
 
   .custom-table-header {
-    background-color: #007bff; /* Bootstrap primary blue */
+    background-color: var(--header-background); /* Bootstrap primary blue */
     color: #ffffff;            /* White text */
   }
   
@@ -65,7 +65,7 @@
     font-weight: bold;
     text-align: center;
     vertical-align: middle;
-    background-color: #5f90d7; /* Bootstrap primary blue */
+    background-color: var(--header-background); /* Bootstrap primary blue */
     color: #ffffff;  
   }
   select.form-control {

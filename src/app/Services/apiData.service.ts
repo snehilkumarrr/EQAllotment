@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Utils } from '../Shared/Utils';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import * as constants from '../Shared/constants';
 import { CryptoService } from './crypto.service';
 
@@ -13,18 +13,21 @@ export class ApiDataService {
   constructor(private http: HttpClient, private cryptoService: CryptoService) {}
 
 
-fetchHeader(path: string)
-{
-  var header={}
-    if(path.startsWith('/auth'))
-    {
-       header=Utils.getHeader();
-    }
-    else{
-      header={};
-    }
-    return header;
-}
+
+  fetchHeader(path: string)
+  {
+    var header={}
+      if(path.startsWith('/auth'))
+      {
+         header=Utils.getHeader().append("withCredentials", "true");
+      }
+      else{
+        header=new HttpHeaders().append("withCredentials", "true");
+              
+      }
+     
+      return header;
+  }
 
   post(data: any, path: any): Observable<any> {
     const encryptedData = this.cryptoService.encrypt(data);
