@@ -44,7 +44,7 @@ loadUserHistory(): void {
     status: this.historyType
   };
     
-    this.apiService.getAuth(HistoryQueryParam, this.requestType).subscribe({
+    this.apiService.get(HistoryQueryParam, this.requestType).subscribe({
         next: (response: any) => {
           console.log("Decrypted data:", response);
             try {

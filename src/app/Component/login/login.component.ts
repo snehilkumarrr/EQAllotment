@@ -7,7 +7,6 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ApiDataService } from 'src/app/Services/apiData.service';
 import { SharedDataService } from 'src/app/Services/sharedData.service';
 import { CryptoService } from 'src/app/Services/crypto.service';
-import { LoginApiDataService } from 'src/app/Services/loginApiData.service';
 // import { HeaderDataService } from 'src/app/Services/headerData.service';
 
 @Component({
@@ -24,7 +23,7 @@ export class LoginComponent {
     captcha: new FormControl('')
   });
 
-  constructor(private router: Router, private loginApiDataservice: LoginApiDataService, private cryptoService:CryptoService,
+  constructor(private router: Router, private apiDataService: ApiDataService, private cryptoService:CryptoService,
     private sharedDataService: SharedDataService
   ) {}
 
@@ -37,7 +36,7 @@ export class LoginComponent {
   }
 
   getCaptcha(){
-    this.loginApiDataservice.getNoAuth( constants.api.noAuthCaptcha).subscribe({
+    this.apiDataService.get( null,constants.api.noAuthCaptcha).subscribe({
       next: (response: any) => {
         this.captchaImage = response.captchaImage
         this.uuid =response.uuid
@@ -71,7 +70,7 @@ export class LoginComponent {
     console.log("==---form====" + JSON.stringify(formData))
 
 
-    this.loginApiDataservice.postNoAuth(formData, constants.api.loginwithcaptcha).subscribe(
+    this.apiDataService.post(formData, constants.api.loginwithcaptcha).subscribe(
       (response: any) => {
           this.sharedDataService.setCaptachEncryptionData(response);
 
