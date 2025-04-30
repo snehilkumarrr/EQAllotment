@@ -29,12 +29,11 @@ export class UserHistoryComponent {
         this.responseRole = loginResponse.authorities[0];
         console.log('login response:', loginResponse.authorities[0]);
         if(this.responseRole == "ROLE_MP") this.requestType = constants.api.sendRequest;
-        if(this.responseRole == "ROLE_AA") this.requestType = constants.api.AaSendRequest;
-        this.loadUserHistory(); 
+        if(this.responseRole == "ROLE_AA") this.requestType = constants.api.aaSendRequest;
+        if(this.responseRole == "ROLE_RAILWAY") this.requestType = constants.api.railGetAllEqRequest;
+        
       }
-      else {
-        alert("response in not availabe at history page")
-      }
+      this.loadUserHistory(); 
     });
   }
 
@@ -68,8 +67,12 @@ loadUserHistory(): void {
   this.historyType = type;
   this.loadUserHistory();
 }
-takeAction(id: number): void {
-  console.log('Take action clicked for ID:', id);
+takeAction(id: any): void {
+  this.router.navigate(['/rb-admin'], {
+    state: {
+      id: id,
+    }
+  });      
 }
 
 }

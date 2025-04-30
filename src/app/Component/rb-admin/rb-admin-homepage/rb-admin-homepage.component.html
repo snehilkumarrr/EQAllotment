@@ -1,46 +1,151 @@
-<div>
-  <div class="card-header mt-3" style="text-align: center;">
-  </div>
+<div class="form-container container py-5">
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-header d-flex justify-content-center align-items-center fw-bold">
+         Approval Page
+        </div>
+        <div class="card-body">
+          <!-- First Form (PNR Input) -->
+
+          <!-- Report Section -->
+          <div class="mt-4">
+            <ng-container>
+                <h5 class="text-center mb-3">Passenger Details</h5>
+                <div class="table-responsive">
+                  <table class="table table-bordered table-sm text-center">
+                    <thead class="custom-table-header">
+                      <tr>
+                        <th>PNR</th>
+                        <th>Eq Request Number</th>
+                        <th>Train No.</th>
+                        <th>Train Name</th>
+                        <th>Train Start Date</th>
+                        <th>Journey Date</th>
+                        <th>Source Station</th>
+                        <th>Destination</th>
+                        <th>Forwarded By</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{{ eqRequestReport.pnr }}</td>
+                        <td>{{ eqRequestReport.eqRequestNo }}</td>
+                        <td>{{ eqRequestReport.trainNo }}</td>
+                        <td>{{ eqRequestReport.trainName }}</td>
+                        <td>{{ eqRequestReport.trainStartDate }}</td>
+                        <td>{{ eqRequestReport.jrnyDate }}</td>
+                        <td>{{ eqRequestReport.srcStation }}</td>
+                        <td>{{ eqRequestReport.destStation }}</td>
+                        <td>{{ eqRequestReport.mpName }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                
+            <ng-container *ngIf="roleAa">
+              <div class="row mb-4">
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0">No of Requested Passenger: {{ eqRequestReport.requestPassengers }}</label>
+                </div>
+              
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0">No of Passengers to be approved: </label>
+                  <select class="form-select form-select-lg" [(ngModel)]="acceptedPassengers" style="max-width: 150px;">
+                    <option *ngFor="let num of [].constructor(eqRequestReport.requestPassengers); let i = index" [value]="i + 1">
+                      {{ i + 1 }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="row mb-4">
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0" for="remarks">Remarks:</label>
+                  <textarea id="remarks" class="form-control" rows="4" [(ngModel)]="remarks" name="remarks" placeholder="Enter your remarks here..."></textarea>
+                </div>
+
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0" for="remarks">Approval:</label>
+                  <select class="form-select form-select-lg"  [(ngModel)]="status" id="status" style="max-width: 100%;" (change)="onApprovalChange($event)">
+                    <option value="" disabled selected>Select Approval</option>
+                    <option *ngFor="let status of approval" [value]="status.name">{{ status.name }}</option>
+                  </select>
+                </div>
+              </div>
+              <ng-container *ngIf="showZones">
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <label class="me-2 mb-0" for="zone">Zone:</label>
+                    <select class="form-select form-select-lg"  id="zone" style="max-width: 100%;" (change)="onZoneChange($event)">
+                      <option value="" disabled selected>Select Zone</option>
+                      <option *ngFor="let zone of allZones" [value]="zone.id">{{ zone.name }}</option>
+                    </select>
+                  </div>
+                
+                  <div class="col-md-6">
+                    <label class="me-2 mb-0" for="division">Division:</label>
+                    <select class="form-select form-select-lg"  [(ngModel)]="forwardDivId" id="division" style="max-width: 100%;" [required]="status == 'APPROVED'">
+                      <option value="" disabled selected>Select Division</option>
+                      <option *ngFor="let div of division" [value]="div.id">{{ div.name }}</option>
+                    </select>
+                  </div>
+                </div>
+              </ng-container>
+
+              <div class="row mb-4">
+                <div class="col-md-12 d-flex justify-content-center align-items-center">
+                  <button class="btn btn-primary" (click)="submitRequest()">Forward</button>
+                </div>
+              </div>
+          </ng-container>
+
+          <ng-container *ngIf="roleRail">
+              <div class="row mb-4">
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0">No of Accepted Passenger by Approving Authority: {{ eqRequestReport.requestPassengers }}</label>
+                </div>
+              
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0">No of Passengers to be approved: </label>
+                  <select class="form-select form-select-lg" [(ngModel)]="acceptedPassengers" style="max-width: 150px;">
+                    <option *ngFor="let num of [].constructor(eqRequestReport.requestPassengers); let i = index" [value]="i + 1">
+                      {{ i + 1 }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              
+              <div class="col-md-6 d-flex align-items-center">
+                <label class="me-2 mb-0" for="remarks">Approval:</label>
+                <select class="form-select form-select-lg"  [(ngModel)]="status" id="status" style="max-width: 100%;">
+                  <option value="" disabled selected>Select Approval</option>
+                  <option *ngFor="let status of allotment" [value]="status.name">{{ status.name }}</option>
+                </select>
+              </div>
+              
+              <div class="row mb-4">
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0" for="remarks">Remarks:</label>
+                  <textarea id="remarks" class="form-control" rows="4" [(ngModel)]="remarks" name="remarks" placeholder="Enter your remarks here..."></textarea>
+                </div>
+              </div>
+              
+              <div class="row mb-4">
+                <div class="col-md-12 d-flex justify-content-center align-items-center">
+                  <button class="btn btn-primary" (click)="submitRequest()">Submit</button>
+                </div>
+              </div>
+          </ng-container>
 
 
-  <div class="table-responsive mt-3">
+              
+            </ng-container>
 
-    <!-- <div class="my-3 mx-3"style="text-align: left;">
-      <button *ngIf="workingReport.length>0"  type="button" class="btn btn-primary" (click)="printTable()">Download PDF</button>
-    </div> -->
-    <table class="table table-bordered table-hover" id="report">
-      <thead class="thead-light">
-        <tr>
-          <th scope="col">Serial Number</th>
-            <th scope="col">Edit Info</th>
-            <th scope="col">Delete Info</th>
-
-          <th scope="col">Connected or Not</th>
-          <th scope="col">Last Connected</th>
-          
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let reportValue of eqRequestReport  | paginate: { itemsPerPage: pageSize, currentPage: currentPage }; let index=index"
-        [ngClass]="{ 'color-shade': (index + 1) % 2 === 0 }">
-      <td class="text-center">{{ (currentPage - 1) * pageSize + index + 1 }}</td>
-            <td class="text-center"><button class="btn btn-primary" (click)="editPage((currentPage - 1) * pageSize + index)">Edit</button></td>
-            <td class="text-center"><button class="btn btn-danger" (click)="deleteData((currentPage - 1) * pageSize + index)">Delete</button></td>
-          <td class="text-center">{{ reportValue.lastNtesConnected }}</td>
-          <td class="text-center">{{ reportValue.reasonNotConnected }}</td>
-         
-          
-        </tr>
-      </tbody>
-    </table>
-    <div class="text-center" *ngIf="!loaderButton">
-      
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="text-center" *ngIf="loaderButton">
-      <div class="blink_me">Please Wait...</div>
-    </div>
   </div>
-
-  <pagination-controls (pageChange)="currentPage  = $event" [autoHide]="true"></pagination-controls>
-
 </div>

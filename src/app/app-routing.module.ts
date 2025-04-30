@@ -5,13 +5,15 @@ import { ApplyQuotaComponent } from './Component/user-homepage/apply-quota/apply
 import { UserHistoryComponent } from './Component/user-homepage/user-history/user-history.component'; 
 
 import { OtpPageComponent } from './Component/otp-page/otp-page.component';
+import { RbAdminHomepageComponent } from './Component/rb-admin/rb-admin-homepage/rb-admin-homepage.component';
 
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'apply-quota', component: ApplyQuotaComponent },
   { path: 'otp-page', component: OtpPageComponent },
-  { path: 'user-history', component: UserHistoryComponent }
+  { path: 'user-history', component: UserHistoryComponent },
+  { path: 'rb-admin', component: RbAdminHomepageComponent }
 ];
 
 @NgModule({
