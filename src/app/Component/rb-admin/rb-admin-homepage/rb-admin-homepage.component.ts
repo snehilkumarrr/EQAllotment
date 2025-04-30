@@ -3,7 +3,6 @@ import * as constants from '../../../Shared/constants';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedDataService } from 'src/app/Services/sharedData.service';
 import { ApiDataService } from 'src/app/Services/apiData.service';
-import { LoginApiDataService } from 'src/app/Services/loginApiData.service';
 import { LoginResponse } from 'src/app/Model/loginResponse';
 
 @Component({
@@ -57,7 +56,7 @@ ngOnInit(){
 
 loadZone(){
   let queryparams =null
-  this.apiDataservice.getAuth(queryparams, constants.api.getAllZones).subscribe({
+  this.apiDataservice.get(queryparams, constants.api.getAllZones).subscribe({
       next: (response: any) => {
 
         this.allZones = response
@@ -87,7 +86,7 @@ this.showZones = true
 
 fetchDivison(zoneId:any){
   const url = `${constants.api.getDivisionByCode}/${zoneId}`
-  this.apiDataservice.getAuth( null,url).subscribe({
+  this.apiDataservice.get( null,url).subscribe({
       next: (response: any) => {
 
         this.division = response
@@ -110,7 +109,7 @@ loadUserRequest(){
   }else{
 this.path =constants.api.railGetEqRequest
   }
-  this.apiDataservice.getAuth(id, this.path).subscribe({
+  this.apiDataservice.get(id, this.path).subscribe({
       next: (response: any) => {
 
         this.eqRequestReport = response
@@ -146,7 +145,7 @@ submitRequest(){
 
   const path = this.roleAa==true? constants.api.aaTakeAction:  constants.api.railTakeAction;
 
-  this.apiDataservice.postAuth(data, path).subscribe({
+  this.apiDataservice.post(data, path).subscribe({
     next: (response: any) => {
 
       console.log("Decrypted data:", JSON.stringify(response));

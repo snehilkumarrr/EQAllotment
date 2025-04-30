@@ -24,7 +24,7 @@ export class OtpPageComponent {
     otp: new FormControl(''),
   });
 
-  constructor(private router: Router, private loginApiDataservice: LoginApiDataService, private sharedDataService: SharedDataService,
+  constructor(private router: Router, private apiDataService: ApiDataService, private sharedDataService: SharedDataService,
     private cryptoService: CryptoService, private route: ActivatedRoute
   ) {
   }
@@ -59,7 +59,7 @@ export class OtpPageComponent {
 
 
 
-    this.loginApiDataservice.postNoAuth(formData, constants.api.otpValidate).subscribe({
+    this.apiDataService.post(formData, constants.api.otpValidate).subscribe({
       next: (response: any) => {
 
           this.sharedDataService.setloginUserData(response);
