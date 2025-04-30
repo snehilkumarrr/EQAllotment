@@ -33,8 +33,12 @@ export class UserHistoryComponent {
         if(this.responseRole == "ROLE_RAILWAY") this.requestType = constants.api.railGetAllEqRequest;
         
       }
-      this.loadUserHistory(); 
+      
     });
+  }
+
+  ngOnInit(){
+    this.loadUserHistory(); 
   }
 
 
