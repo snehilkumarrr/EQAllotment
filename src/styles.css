@@ -1,11 +1,65 @@
 /* Global styles and imports */
-@import 'bootstrap/dist/css/bootstrap.min.css';
 
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
 :root {
   --bs-font-sans-serif: Arial, sans-serif; 
   --header-background: #003366; 
   --secondary-color: #E6F0FF; 
   --link-color: #4D4D4D;
+  
+
+}
+.navbar-nav {
+    text-align: center;
 }
 
+.card-header{
+    text-align:center;
+    }
+
+    body {
+        font-family: Arial, sans-serif; /* Body text */
+      }
+      .appbackground{
+        background-color:var(--header-background);
+      }
+      
+      .apptitle{
+        color:white; font-size:2.5rem
+        ; text-align: center; padding:10px;
+      }
+      
+      .content-container {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 84px); /* Set full viewport height */
+      }
+      
+      app-footer {
+        bottom: 0;
+        width: 100%;
+      }
+      
+      /* Media query for smaller screens */
+      @media screen and (max-width: 768px) {
+      
+        /* Adjust styles for smaller screens */
+        .content-container {
+          /* Reset the minimum height */
+        }
+      
+        app-footer {
+          position: relative;
+          /* Reset the footer position */
+        }
+      }
+      
+      .page-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      
+      
+      
