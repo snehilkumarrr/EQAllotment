@@ -6,7 +6,6 @@ import { CryptoService } from 'src/app/Services/crypto.service';
 import { SharedDataService } from 'src/app/Services/sharedData.service';
 import { ActivatedRoute } from '@angular/router';
 import * as constants from '../../Shared/constants';
-import { LoginApiDataService } from 'src/app/Services/loginApiData.service';
 
 @Component({
   selector: 'app-otp-page',
