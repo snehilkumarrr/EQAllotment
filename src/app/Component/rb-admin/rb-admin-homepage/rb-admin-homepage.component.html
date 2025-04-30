@@ -2,8 +2,8 @@
   <div class="row justify-content-center mt-5">
     <div class="col-md-10">
       <div class="card">
-        <div class="card-header d-flex justify-content-center align-items-center">
-          Check PNR For Quota
+        <div class="card-header d-flex justify-content-center align-items-center fw-bold">
+         Approval Page
         </div>
         <div class="card-body">
           <!-- First Form (PNR Input) -->
@@ -43,37 +43,37 @@
                   </table>
                 </div>
                 
-
-                <div class="row mb-4">
-                  <div class="col-md-6 d-flex align-items-center">
-                    <label class="me-2 mb-0">No of Requested Passenger: {{ eqRequestReport.requestPassengers }}</label>
-                  </div>
-                
-                  <div class="col-md-6 d-flex align-items-center">
-                    <label class="me-2 mb-0">No of Passengers to be approved: </label>
-                    <select class="form-select form-select-lg" [(ngModel)]="acceptedPassengers" style="max-width: 150px;">
-                      <option *ngFor="let num of [].constructor(eqRequestReport.requestPassengers); let i = index" [value]="i + 1">
-                        {{ i + 1 }}
-                      </option>
-                    </select>
-                  </div>
+            <ng-container *ngIf="roleAa">
+              <div class="row mb-4">
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0">No of Requested Passenger: {{ eqRequestReport.requestPassengers }}</label>
                 </div>
-                
-                <div class="row mb-4">
-                  <div class="col-md-6 d-flex align-items-center">
-                    <label class="me-2 mb-0" for="remarks">Remarks:</label>
-                    <textarea id="remarks" class="form-control" rows="4" [(ngModel)]="remarks" name="remarks" placeholder="Enter your remarks here..."></textarea>
-                  </div>
-
-                  <div class="col-md-6 d-flex align-items-center">
-                    <label class="me-2 mb-0" for="remarks">Approval:</label>
-                    <select class="form-select form-select-lg"  [(ngModel)]="status" id="status" style="max-width: 100%;">
-                      <option value="" disabled selected>Select Approval</option>
-                      <option *ngFor="let status of approval" [value]="status.name">{{ status.name }}</option>
-                    </select>
-                  </div>
+              
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0">No of Passengers to be approved: </label>
+                  <select class="form-select form-select-lg" [(ngModel)]="acceptedPassengers" style="max-width: 150px;">
+                    <option *ngFor="let num of [].constructor(eqRequestReport.requestPassengers); let i = index" [value]="i + 1">
+                      {{ i + 1 }}
+                    </option>
+                  </select>
                 </div>
-                
+              </div>
+              
+              <div class="row mb-4">
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0" for="remarks">Remarks:</label>
+                  <textarea id="remarks" class="form-control" rows="4" [(ngModel)]="remarks" name="remarks" placeholder="Enter your remarks here..."></textarea>
+                </div>
+
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0" for="remarks">Approval:</label>
+                  <select class="form-select form-select-lg"  [(ngModel)]="status" id="status" style="max-width: 100%;" (change)="onApprovalChange($event)">
+                    <option value="" disabled selected>Select Approval</option>
+                    <option *ngFor="let status of approval" [value]="status.name">{{ status.name }}</option>
+                  </select>
+                </div>
+              </div>
+              <ng-container *ngIf="showZones">
                 <div class="row mb-4">
                   <div class="col-md-6">
                     <label class="me-2 mb-0" for="zone">Zone:</label>
@@ -85,17 +85,61 @@
                 
                   <div class="col-md-6">
                     <label class="me-2 mb-0" for="division">Division:</label>
-                    <select class="form-select form-select-lg"  [(ngModel)]="forwardDivId" id="division" style="max-width: 100%;">
+                    <select class="form-select form-select-lg"  [(ngModel)]="forwardDivId" id="division" style="max-width: 100%;" [required]="status == 'APPROVED'">
                       <option value="" disabled selected>Select Division</option>
                       <option *ngFor="let div of division" [value]="div.id">{{ div.name }}</option>
                     </select>
                   </div>
                 </div>
-                <div class="row mb-4">
-                  <div class="col-md-12 d-flex justify-content-center align-items-center">
-                    <button class="btn btn-primary" (click)="submitRequest()">Forward</button>
-                  </div>
+              </ng-container>
+
+              <div class="row mb-4">
+                <div class="col-md-12 d-flex justify-content-center align-items-center">
+                  <button class="btn btn-primary" (click)="submitRequest()">Forward</button>
                 </div>
+              </div>
+          </ng-container>
+
+          <ng-container *ngIf="roleRail">
+              <div class="row mb-4">
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0">No of Accepted Passenger by Approving Authority: {{ eqRequestReport.requestPassengers }}</label>
+                </div>
+              
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0">No of Passengers to be approved: </label>
+                  <select class="form-select form-select-lg" [(ngModel)]="acceptedPassengers" style="max-width: 150px;">
+                    <option *ngFor="let num of [].constructor(eqRequestReport.requestPassengers); let i = index" [value]="i + 1">
+                      {{ i + 1 }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              
+              <div class="col-md-6 d-flex align-items-center">
+                <label class="me-2 mb-0" for="remarks">Approval:</label>
+                <select class="form-select form-select-lg"  [(ngModel)]="status" id="status" style="max-width: 100%;">
+                  <option value="" disabled selected>Select Approval</option>
+                  <option *ngFor="let status of allotment" [value]="status.name">{{ status.name }}</option>
+                </select>
+              </div>
+              
+              <div class="row mb-4">
+                <div class="col-md-6 d-flex align-items-center">
+                  <label class="me-2 mb-0" for="remarks">Remarks:</label>
+                  <textarea id="remarks" class="form-control" rows="4" [(ngModel)]="remarks" name="remarks" placeholder="Enter your remarks here..."></textarea>
+                </div>
+              </div>
+              
+              <div class="row mb-4">
+                <div class="col-md-12 d-flex justify-content-center align-items-center">
+                  <button class="btn btn-primary" (click)="submitRequest()">Submit</button>
+                </div>
+              </div>
+          </ng-container>
+
+
               
             </ng-container>
 
