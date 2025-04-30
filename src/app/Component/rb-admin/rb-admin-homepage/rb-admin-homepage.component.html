@@ -103,13 +103,13 @@
           <ng-container *ngIf="roleRail">
               <div class="row mb-4">
                 <div class="col-md-6 d-flex align-items-center">
-                  <label class="me-2 mb-0">No of Accepted Passenger by Approving Authority: {{ eqRequestReport.requestPassengers }}</label>
+                  <label class="me-2 mb-0">No of Accepted Passenger by Approving Authority: {{ eqRequestReport.acceptedPassengers }}</label>
                 </div>
               
                 <div class="col-md-6 d-flex align-items-center">
                   <label class="me-2 mb-0">No of Passengers to be approved: </label>
                   <select class="form-select form-select-lg" [(ngModel)]="acceptedPassengers" style="max-width: 150px;">
-                    <option *ngFor="let num of [].constructor(eqRequestReport.requestPassengers); let i = index" [value]="i + 1">
+                    <option *ngFor="let num of [].constructor(eqRequestReport.acceptedPassengers); let i = index" [value]="i + 1">
                       {{ i + 1 }}
                     </option>
                   </select>
