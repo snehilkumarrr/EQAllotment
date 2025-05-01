@@ -14,7 +14,22 @@
       <option value="C">Past Requests</option>
     </select>
   </div>
-
+  <table id="myTable" class="display">
+    <thead>
+      <tr>
+        <th>Name</th><th>Position</th><th>Office</th><th>Age</th><th>Start date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let emp of employees">
+        <td>{{ emp.name }}</td>
+        <td>{{ emp.position }}</td>
+        <td>{{ emp.office }}</td>
+        <td>{{ emp.age }}</td>
+        <td>{{ emp.startDate }}</td>
+      </tr>
+    </tbody>
+  </table>
  <!--yaha se for loop laga ke data liya userHistory variable-->
  <div class="table-responsive shadow rounded">
   <!-- Table for ROLE_MP -->

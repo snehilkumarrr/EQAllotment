@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiDataService } from 'src/app/Services/apiData.service';
 import { CryptoService } from 'src/app/Services/crypto.service';
@@ -6,6 +6,7 @@ import * as constants from 'src/app/Shared/constants';
 import { UserHistoryDTO } from 'src/app/Model/user-history.dto';
 import { LoginResponse } from 'src/app/Model/loginResponse';
 import { SharedDataService } from 'src/app/Services/sharedData.service';
+declare var $: any;
 
 
 
@@ -14,8 +15,16 @@ import { SharedDataService } from 'src/app/Services/sharedData.service';
   templateUrl: './user-history.component.html',
   styleUrls: ['./user-history.component.css']
 })
-export class UserHistoryComponent {
-  
+export class UserHistoryComponent implements AfterViewInit{
+  employees = [
+    { name: 'John Doe', position: 'Developer', office: 'New York', age: 30, startDate: '2020-01-01' },
+    { name: 'Jane Smith', position: 'Designer', office: 'London', age: 28, startDate: '2021-03-15' },
+    // Add more rows here
+  ];
+
+  ngAfterViewInit() {
+    $('#myTable').DataTable();
+  }
   userHistory: UserHistoryDTO[] = [];
   loginResponse: LoginResponse | null = null;
   responseRole: String = "";
