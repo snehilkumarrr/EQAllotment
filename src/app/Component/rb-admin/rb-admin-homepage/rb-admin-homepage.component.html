@@ -10,7 +10,7 @@
 
           <!-- Report Section -->
           <div class="mt-4">
-            <ng-container>
+            
                 <h5 class="text-center mb-3">Passenger Details</h5>
                 <div class="table-responsive">
                   <table class="table table-bordered table-sm text-center">
@@ -42,7 +42,7 @@
                     </tbody>
                   </table>
                 </div>
-                
+                <ng-container *ngIf="!showAfterSubmission">
             <ng-container *ngIf="roleAa">
               <div class="row mb-4">
                 <div class="col-md-6 d-flex align-items-center">
@@ -141,6 +141,11 @@
 
 
               
+            </ng-container>
+            <ng-container *ngIf="showAfterSubmission">
+              <div *ngIf="successMessage" class="alert alert-success text-center mt-3">
+                {{ successMessage }}
+              </div>
             </ng-container>
 
           </div>

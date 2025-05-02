@@ -30,6 +30,8 @@ requestId:any
 roleAa:boolean =false;
 roleRail:boolean =false;
 path:any;
+successMessage:any;
+showAfterSubmission:boolean=false;
 constructor(private router: Router, private apiDataservice: ApiDataService, private sharedDataService: SharedDataService, private route: ActivatedRoute
 ) {
 
@@ -143,6 +145,22 @@ submitRequest(){
     data.forwardDivId = this.forwardDivId;
   }
 
+  const missingFields: string[] = [];
+
+if (!data.id) missingFields.push('id');
+if (!data.status) missingFields.push('Approval');
+if (!data.acceptedPassengers) missingFields.push('acceptedPassengers');
+
+if (this.roleAa === true && !data.forwardDivId) {
+  missingFields.push('Div/Zone');
+}
+
+if (missingFields.length > 0) {
+  console.error('Missing required fields:', missingFields);
+  alert(`Missing required fields: ${missingFields}`);
+  return;
+}
+
   const path = this.roleAa==true? constants.api.aaTakeAction:  constants.api.railTakeAction;
 
   this.apiDataservice.post(data, path).subscribe({
@@ -150,7 +168,13 @@ submitRequest(){
 
       console.log("Decrypted data:", JSON.stringify(response));
       alert(JSON.stringify(response));
-      this.router.navigate(['/user-history']);  
+      this.showAfterSubmission =true
+      this.successMessage = response.message;
+      setTimeout(() => {
+        this.router.navigate(['/user-history']);  
+      }, 5000);
+      
+      
 
     },
     error: (err) => {
