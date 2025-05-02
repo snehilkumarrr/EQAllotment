@@ -135,7 +135,7 @@ export class RbAdminHomepageComponent {
     if (!data.status) missingFields.push('Approval');
     if (!data.acceptedPassengers) missingFields.push('acceptedPassengers');
 
-    if (this.roleAa === true && !data.forwardDivId) {
+    if (this.roleAa === true && !data.forwardDivId && this.status=='APPROVED') {
       missingFields.push('Div/Zone');
     }
 
