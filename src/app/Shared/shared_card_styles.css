@@ -2,7 +2,6 @@
 
 .card {
   width: 100%;
-  max-width: 500px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #9ec4de; /* Blue border color */
@@ -15,7 +14,7 @@ h1 {
   font-size: 30px;
   text-align: center;
   padding-bottom: 10px;
-  color: #3498db; /* Blue header text color */
+  color: var(--header-background); /* Blue header text color */
 }
 
 label {
@@ -49,7 +48,7 @@ select {
 }
 
 button {
-  background-color: #3498db; /* Blue button background color */
+  background-color: var(--header-background); /* Blue button background color */
   color: white;
   padding: 10px 20px;
   border: none;

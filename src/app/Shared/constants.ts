@@ -4,9 +4,9 @@ export const BASE_URL                      = 'http://10.64.24.46:8080/quota-back
 export const POST_LOGIN_URL = '/auth/login';
 
 export const RoleName = {
-  "ROLE_MP": 1,
-  "ROLE_ZONAL_ADMIN": 2,
-  "ROLE_DIVISIONAL_ADMIN": 3,
+  "roleMp":"ROLE_MP",
+  "roleAa": "ROLE_AA",
+  "roleRail":"ROLE_RAILWAY",
 }
 
 
@@ -17,8 +17,14 @@ export const api = {
   "authPnr": "/auth/mp/external/pnrEnquiry",
   "sendRequest": "/auth/mp/getAllSentRequests",
   "saveEqRequest": "/auth/mp/saveEqRequest",
-  "AaSendRequest": "/auth/aa/getAllSentRequests",
-  "AaSaveEqRequest": "/auth/aa/saveEqRequest",
-  "AaTakeAction": "auth/aa/takeAction"
+  "aaGetEqRequest" : "/auth/aa/getEQRequest",
+  "getAllZones":"/auth/basic/zones",
+  "getDivisionByCode":"/auth/basic/divbyzone",
+  "aaSendRequest": "/auth/aa/getAllSentRequests",
+  "aaSaveEqRequest": "/auth/aa/saveEqRequest",
+  "aaTakeAction": "/auth/aa/takeAction",
+  "railGetAllEqRequest": "/auth/railway/getAllSentRequests",
+  "railGetEqRequest": "/auth/railway/getEQRequest",
+  "railTakeAction": "/auth/railway/takeAction",
 };
   

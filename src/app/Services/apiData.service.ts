@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Utils } from '../Shared/Utils';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import * as constants from '../Shared/constants';
 import { CryptoService } from './crypto.service';
 
@@ -12,10 +12,28 @@ import { CryptoService } from './crypto.service';
 export class ApiDataService {
   constructor(private http: HttpClient, private cryptoService: CryptoService) {}
 
-  postAuth(data: any, path: any): Observable<any> {
+
+
+  fetchHeader(path: string)
+  {
+    var header={}
+      if(path.startsWith('/auth'))
+      {
+         header=Utils.getHeader().append("withCredentials", "true");
+      }
+      else{
+        header=new HttpHeaders().append("withCredentials", "true");
+              
+      }
+     
+      return header;
+  }
+
+  post(data: any, path: any): Observable<any> {
     const encryptedData = this.cryptoService.encrypt(data);
     const url = constants.BASE_URL + `${path}`;
-    return this.http.post(url, encryptedData,{ headers: Utils.getHeader()}).pipe(
+    
+    return this.http.post(url, encryptedData,{ headers: this.fetchHeader(path)}).pipe(
       map((response: any) => {
         if(response.success){
         if (response.encdata) {
@@ -32,9 +50,9 @@ export class ApiDataService {
     );
   }  
 
-  getAuth(queryParams: any, path: any): Observable<any> {
+  get(queryParams: any, path: any): Observable<any> {
     const url = constants.BASE_URL + `${path}`;
-    return this.http.get(url, { headers: Utils.getHeader(), params: queryParams }).pipe(
+    return this.http.get(url, { headers: this.fetchHeader(path), params: queryParams }).pipe(
       map((response: any) => {
         if (response.success && response.encdata) {
           return this.cryptoService.decrypt(response.encdata);

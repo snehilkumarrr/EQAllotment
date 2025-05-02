@@ -40,7 +40,7 @@ export class ApplyQuotaComponent {
   
     const requestData = { pnr: this.quotaForm.value.quota };
   
-    this.apiService.getAuth(requestData, constants.api.authPnr).subscribe({
+    this.apiService.get(requestData, constants.api.authPnr).subscribe({
       next: (response: any) => {
         // You may need to adjust this condition based on your API's actual response structure
         if (!response || !response.pnrNumber || response.passengerList?.length === 0) {
@@ -78,7 +78,7 @@ export class ApplyQuotaComponent {
       remarks: this.quotaForm.value.remarks
     };
   
-    this.apiService.postAuth(payload, constants.api.saveEqRequest).subscribe({
+    this.apiService.post(payload, constants.api.saveEqRequest).subscribe({
       next: (res) => {
         console.log("Quota request submitted successfully:", res);
   

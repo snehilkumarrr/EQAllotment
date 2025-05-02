@@ -1,4 +1,81 @@
 /* Global styles and imports */
+
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
+:root {
+  --bs-font-sans-serif: Arial, sans-serif; 
+  --header-background: #003366; 
+  --secondary-color: #E6F0FF; 
+  --link-color: #4D4D4D;
+  
+  --bs-btn-disabled-bg: #003366a0;
+}
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--header-background);
+    --bs-btn-border-color: var(--header-background);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--header-background);
+    --bs-btn-hover-border-color: var(--header-background);
+    --bs-btn-focus-shadow-rgb: 49, 132, 253;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--header-background);
+    --bs-btn-active-border-color: var(--header-background);
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+     --bs-btn-disabled-bg: #003366a0; 
+    --bs-btn-disabled-border-color: #003366a0;
+}
+.navbar-nav {
+    text-align: center;
+}
 
+.card-header{
+    text-align:center;
+    }
+
+    body {
+        font-family: Arial, sans-serif; /* Body text */
+      }
+      .appbackground{
+        background-color:var(--header-background);
+      }
+      
+      .apptitle{
+        color:white; font-size:2.5rem
+        ; text-align: center; padding:10px;
+      }
+      
+      .content-container {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 84px); /* Set full viewport height */
+      }
+      
+      app-footer {
+        bottom: 0;
+        width: 100%;
+      }
+      
+      /* Media query for smaller screens */
+      @media screen and (max-width: 768px) {
+      
+        /* Adjust styles for smaller screens */
+        .content-container {
+          /* Reset the minimum height */
+        }
+      
+        app-footer {
+          position: relative;
+          /* Reset the footer position */
+        }
+      }
+      
+      .page-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      
+      
+      

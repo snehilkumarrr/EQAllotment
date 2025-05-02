@@ -6,7 +6,6 @@ import { LoginComponent } from './Component/login/login.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavBarComponent } from './Component/nav-bar/nav-bar.component';
 import { FooterComponent } from './Component/footer/footer.component';
-import { NavBarHomeComponent } from './Component/nav-bar-home/nav-bar-home.component';
 import { ApplyQuotaComponent } from './Component/user-homepage/apply-quota/apply-quota.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ApiDataService } from './Services/apiData.service';
@@ -18,6 +17,7 @@ import { OtpPageComponent } from './Component/otp-page/otp-page.component';
 import { UserHistoryComponent } from './Component/user-homepage/user-history/user-history.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
+import { RbAdminHomepageComponent } from './Component/rb-admin/rb-admin-homepage/rb-admin-homepage.component';
 
 
 @NgModule({
@@ -27,10 +27,10 @@ import { FormsModule } from '@angular/forms';
     LoginComponent,
     NavBarComponent,
     FooterComponent,
-    NavBarHomeComponent,
     ApplyQuotaComponent,
     OtpPageComponent,
-    UserHistoryComponent
+    UserHistoryComponent,
+    RbAdminHomepageComponent
   ],
   imports: [
     BrowserModule,

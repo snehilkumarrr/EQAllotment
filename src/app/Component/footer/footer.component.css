@@ -1,5 +1,5 @@
 .footer {
-  background-color: #5d7084;
+  background-color:var(--header-background);
   color: #ffffff; 
   width: 100%;
   text-align: center;

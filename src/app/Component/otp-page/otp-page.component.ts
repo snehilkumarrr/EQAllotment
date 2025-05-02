@@ -7,7 +7,6 @@ import { CryptoService } from 'src/app/Services/crypto.service';
 import { SharedDataService } from 'src/app/Services/sharedData.service';
 import { ActivatedRoute } from '@angular/router';
 import * as constants from '../../Shared/constants';
-import { LoginApiDataService } from 'src/app/Services/loginApiData.service';
 
 @Component({
   selector: 'app-otp-page',
@@ -25,7 +24,7 @@ export class OtpPageComponent {
     otp: new FormControl(''),
   });
 
-  constructor(private router: Router, private loginApiDataservice: LoginApiDataService, private sharedDataService: SharedDataService,
+  constructor(private router: Router,private apiDataService:  ApiDataService, private sharedDataService: SharedDataService,
     private cryptoService: CryptoService, private route: ActivatedRoute,private sessionStorageService: SessionStorageService
   ) {
   }
@@ -58,7 +57,7 @@ export class OtpPageComponent {
 
 
 
-    this.loginApiDataservice.postNoAuth(formData, constants.api.otpValidate).subscribe({
+    this.apiDataService.post(formData, constants.api.otpValidate).subscribe({
       next: (response: any) => {
         console.log("==---response====" + JSON.stringify(response))
 
