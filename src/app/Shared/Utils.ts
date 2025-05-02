@@ -9,8 +9,9 @@ export class Utils {
   static getHeader(): HttpHeaders {
     return new HttpHeaders()
       .append("Content-Type", "application/json")
-
       .append("Authorization", "Bearer " + localStorage.getItem("accessToken"));
+
+    ;
   }
   
 }
