@@ -15,16 +15,16 @@ declare var $: any;
   templateUrl: './user-history.component.html',
   styleUrls: ['./user-history.component.css']
 })
-export class UserHistoryComponent implements AfterViewInit{
-  employees = [
-    { name: 'John Doe', position: 'Developer', office: 'New York', age: 30, startDate: '2020-01-01' },
-    { name: 'Jane Smith', position: 'Designer', office: 'London', age: 28, startDate: '2021-03-15' },
-    // Add more rows here
-  ];
+export class UserHistoryComponent {
+  
 
-  ngAfterViewInit() {
-    $('#myTable').DataTable();
+  initDataTable() {
+    setTimeout(() => {
+      $('#myTable').DataTable();
+    }, 0);
   }
+  
+ 
   userHistory: UserHistoryDTO[] = [];
   loginResponse: LoginResponse | null = null;
   responseRole: String = "";
@@ -47,6 +47,7 @@ export class UserHistoryComponent implements AfterViewInit{
   }
 
   ngOnInit(){
+   
     this.loadUserHistory(); 
   }
 
@@ -60,8 +61,10 @@ loadUserHistory(): void {
     this.apiService.get(HistoryQueryParam, this.requestType).subscribe({
         next: (response: any) => {
           console.log("Decrypted data:", response);
+         
             try {
               this.userHistory = response as UserHistoryDTO[];
+              this.initDataTable();
             } catch (e) {
               console.error("Failed to put data in the model", e);
               this.userHistory = [];
