@@ -17,9 +17,14 @@ export class ApiDataService {
     const url = constants.BASE_URL + `${path}`;
     return this.http.post(url, encryptedData,{ headers: Utils.getHeader()}).pipe(
       map((response: any) => {
-        if (response.success && response.encdata) {
+        if(response.success){
+        if (response.encdata) {
           return this.cryptoService.decrypt(response.encdata);
-        } else {
+        }
+        else{
+          return response.success ;
+        }
+       } else {
           alert(response.message);
           throw new Error(response.message); 
         }

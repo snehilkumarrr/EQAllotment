@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SessionStorageService } from '../../Services/session-storage.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiDataService } from 'src/app/Services/apiData.service';
@@ -25,7 +26,7 @@ export class OtpPageComponent {
   });
 
   constructor(private router: Router, private loginApiDataservice: LoginApiDataService, private sharedDataService: SharedDataService,
-    private cryptoService: CryptoService, private route: ActivatedRoute
+    private cryptoService: CryptoService, private route: ActivatedRoute,private sessionStorageService: SessionStorageService
   ) {
   }
 
@@ -37,8 +38,6 @@ export class OtpPageComponent {
     this.captchaImageData = state.captchaImage;
     this.uuid=state.uuid
   }
-
-
 
   onSubmit() {
 
@@ -61,8 +60,13 @@ export class OtpPageComponent {
 
     this.loginApiDataservice.postNoAuth(formData, constants.api.otpValidate).subscribe({
       next: (response: any) => {
+        console.log("==---response====" + JSON.stringify(response))
 
-          this.sharedDataService.setloginUserData(response);
+        // ✅ Save required data to session storage
+        this.sessionStorageService.setItem('username', response.username);
+        this.sessionStorageService.setObject('authorities', response.authorities);
+
+         //  this.sharedDataService.setloginUserData(response);
           localStorage.setItem("accessToken", response.accessToken);
           this.router.navigate(['/apply-quota']);
         

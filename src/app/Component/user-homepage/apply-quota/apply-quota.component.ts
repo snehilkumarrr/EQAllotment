@@ -86,12 +86,12 @@ export class ApplyQuotaComponent {
         this.quotaForm.reset();
         this.personReport = null;
         this.errorMessage = null;
-        this.successMessage = 'Your quota request was submitted successfully.';
+        this.successMessage = JSON.stringify(res.message);
         this.isSubmitted = false;
       },
       error: (err) => {
         console.error("🚨 Error submitting quota request:", err);
-        alert("Something went wrong while submitting the quota request.");
+        // alert("Something went wrong while submitting the quota request.");
       }
     });
   }
