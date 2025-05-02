@@ -7,6 +7,9 @@ import { UserHistoryDTO } from 'src/app/Model/user-history.dto';
 import { LoginResponse } from 'src/app/Model/loginResponse';
 import { SharedDataService } from 'src/app/Services/sharedData.service';
 declare var $: any;
+import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 
@@ -16,8 +19,6 @@ declare var $: any;
   styleUrls: ['./user-history.component.css']
 })
 export class UserHistoryComponent {
-  
-
   initDataTable() {
     setTimeout(() => {
       $('#myTable').DataTable();
@@ -47,7 +48,6 @@ export class UserHistoryComponent {
   }
 
   ngOnInit(){
-   
     this.loadUserHistory(); 
   }
 
@@ -79,7 +79,6 @@ loadUserHistory(): void {
     );
  }
  onHistoryTypeChange(type: string): void {
-  console.log("before value" + this.historyType);
   this.historyType = type;
   this.loadUserHistory();
 }
@@ -90,5 +89,17 @@ takeAction(id: any): void {
     }
   });      
 }
+exportToExcel(): void {
+  const element = document.getElementById('myTable');
+  const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  XLSX.writeFile(wb, 'UserData.xlsx');
+}
 
+exportToPDF(): void {
+  const doc = new jsPDF();
+  autoTable(doc, { html: '#myTable' });
+  doc.save('UserData.pdf');
+}
 }
