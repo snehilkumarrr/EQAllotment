@@ -32,10 +32,19 @@ export class OtpPageComponent {
   ngOnInit() {
     const state = window.history.state;
 
-     this.username = state.username;
+    if (!state || !state.username) {
+      this.router.navigate(['/']); 
+      return;
+    }
+  
+    console.log('abc', JSON.stringify(state));
+    this.username = state.username;
     this.password = state.password;
     this.captchaImageData = state.captchaImage;
-    this.uuid=state.uuid
+    this.uuid = state.uuid;
+  
+
+    history.replaceState(null, '', location.href);
   }
 
   onSubmit() {
@@ -53,7 +62,7 @@ export class OtpPageComponent {
       password: this.password,
       captcha : this.captchaImageData,
       uuid:this.uuid
-    };console.log("---forData----" + JSON.stringify(formData))
+    };
 
 
 
@@ -67,7 +76,12 @@ export class OtpPageComponent {
 
          //  this.sharedDataService.setloginUserData(response);
           localStorage.setItem("accessToken", response.accessToken);
-          this.router.navigate(['/apply-quota']);
+          if(response.authorities[0]==constants.RoleName.roleAa || response.authorities[0]==constants.RoleName.roleRail){
+            this.router.navigate(['/user-history']);
+          }else{
+            this.router.navigate(['/apply-quota']);
+          }
+          
         
       },
       error: (err) => {
