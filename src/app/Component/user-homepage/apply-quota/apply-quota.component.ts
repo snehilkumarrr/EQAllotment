@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SessionStorageService } from 'src/app/Services/session-storage.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PersonReport } from 'src/app/Model/pnr-enquiry';
 import { ApiDataService } from 'src/app/Services/apiData.service';
@@ -16,17 +17,28 @@ export class ApplyQuotaComponent {
   isSubmitted: boolean = false; // Flag to track if the form has been submitted
   errorMessage: string | null = null; // To store any error messages
   successMessage: string | null = null;
+  userName: string = '';
+  roles: string[] = [];
+
+
+
 
   constructor(
     private fb: FormBuilder,
     private apiService: ApiDataService,
-    private cryptoService: CryptoService
+    private cryptoService: CryptoService,
+    private sessionStorageService: SessionStorageService
   ) {
     this.quotaForm = this.fb.group({
       quota: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
       noOfPassengers: ['', Validators.required],
       remarks: ['']
     });
+  }
+  ngOnInit(): void {
+    // ✅ Read session storage values
+    this.userName = this.sessionStorageService.getItem('username') || '';
+    this.roles = this.sessionStorageService.getObject('authorities') || [];
   }
 
   onSubmit() {
@@ -80,18 +92,18 @@ export class ApplyQuotaComponent {
   
     this.apiService.post(payload, constants.api.saveEqRequest).subscribe({
       next: (res) => {
-        console.log("Quota request submitted successfully:", res);
+       // console.log("Quota request submitted successfully:", res);
   
         // Reset everything
         this.quotaForm.reset();
         this.personReport = null;
         this.errorMessage = null;
-        this.successMessage = 'Your quota request was submitted successfully.';
+        this.successMessage = JSON.stringify(res.message);
         this.isSubmitted = false;
       },
       error: (err) => {
         console.error("🚨 Error submitting quota request:", err);
-        alert("Something went wrong while submitting the quota request.");
+        // alert("Something went wrong while submitting the quota request.");
       }
     });
   }

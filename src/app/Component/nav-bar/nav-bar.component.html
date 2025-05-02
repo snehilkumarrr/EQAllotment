@@ -22,7 +22,7 @@
         </li>
     
         <!-- Show these only if loginResponse is NOT null -->
-        <ng-container *ngIf="loginResponse">
+        <ng-container *ngIf="beforeLogout">
           <li class="nav-item">
             <a class="nav-link" routerLink="/apply-quota">Apply Quota</a>
           </li>
@@ -37,7 +37,7 @@
     
       <ul class="navbar-nav">
         <!-- Logout button shown only if loginResponse is NOT null -->
-        <ng-container *ngIf="loginResponse">
+        <ng-container *ngIf="beforeLogout">
           <li class="nav-item">
             <a class="nav-link" routerLink="/" (click)="logoutFunction()">Logout</a>
           </li>

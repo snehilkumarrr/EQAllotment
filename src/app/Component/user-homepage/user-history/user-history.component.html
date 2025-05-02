@@ -2,14 +2,14 @@
   <div class="mb-3">
     <label for="historyTypeSelect" class="form-label fw-bold">Select Request Type: </label>
     <select
-      id="historyTypeSelect"
-      class="form-select w-auto d-inline-block"
-      [(ngModel)]="historyType"
-      (change)="onHistoryTypeChange(historyType)"
-    >
-      <option value="P" selected>Current Requests</option>
-      <option value="C">Past Requests</option>
-    </select>
+  id="historyTypeSelect"
+  class="form-select w-auto d-inline-block"
+  [(ngModel)]="historyType"  
+  (change)="onHistoryTypeChange(historyType)"  
+>
+  <option value="P" selected>Current Requests</option> <!-- Default value for 'Current Requests' -->
+  <option value="C">Past Requests</option> <!-- Option for 'Past Requests' -->
+</select>
   </div>
   <!DOCTYPE html>
   
