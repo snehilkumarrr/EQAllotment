@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
+import { SessionStorageService } from 'src/app/Services/session-storage.service';
 import * as constants from '../../../Shared/constants';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SharedDataService } from 'src/app/Services/sharedData.service';
 import { ApiDataService } from 'src/app/Services/apiData.service';
-import { LoginResponse } from 'src/app/Model/loginResponse';
 
 @Component({
   selector: 'app-rb-admin-homepage',
@@ -11,187 +10,161 @@ import { LoginResponse } from 'src/app/Model/loginResponse';
   styleUrls: ['./rb-admin-homepage.component.css', '../../../Shared/shared_card_styles.css']
 })
 export class RbAdminHomepageComponent {
-  eqRequestReport:any;
-  allZones :any[]=[];
- division:any[]=[];
- approval:any[] = [{"name":"APPROVED"}, {"name":"REJECTED"}]
- allotment:any[] = [{"name":"ALLOTTED"}, {"name":"REJECTED"}]
-  remarks:string='';
-  status:string ='';
-  forwardDivId:any;
-  loginResponse:any
-  currentPage = 1;  
-pageSize = 10;
-userType:any;
-loaderButton: boolean = false;
-showZones:boolean=false;
-acceptedPassengers: any = 1;
-requestId:any
-roleAa:boolean =false;
-roleRail:boolean =false;
-path:any;
-successMessage:any;
-showAfterSubmission:boolean=false;
-constructor(private router: Router, private apiDataservice: ApiDataService, private sharedDataService: SharedDataService, private route: ActivatedRoute
-) {
+  eqRequestReport: any;
+  allZones: any[] = [];
+  division: any[] = [];
+  approval: any[] = [{ "name": "APPROVED" }, { "name": "REJECTED" }];
+  allotment: any[] = [{ "name": "ALLOTTED" }, { "name": "REJECTED" }];
+  remarks: string = '';
+  status: string = '';
+  forwardDivId: any;
+  currentPage = 1;
+  pageSize = 10;
+  loaderButton: boolean = false;
+  showZones: boolean = false;
+  acceptedPassengers: any = 1;
+  requestId: any;
+  roleAa: boolean = false;
+  roleRail: boolean = false;
+  path: any;
+  showAfterSubmission:boolean=false;
+  successMessage:any;
 
-  }
 
-ngOnInit(){
+  username: string = '';
+  authorities: string[] = [];
 
-  this.sharedDataService.loginUserData.subscribe((loginResponse) => {
-    if (loginResponse) {
-      this.loginResponse = loginResponse;
-    }
-  });
-  if(constants.RoleName.roleAa == this.loginResponse.authorities[0]){
-    this.roleAa =true
-  }else if(constants.RoleName.roleRail == this.loginResponse.authorities[0]){
-    this.roleRail=true
-  }
-  const state = window.history.state;
+  constructor(
+    private router: Router,
+    private apiDataservice: ApiDataService,
+    private route: ActivatedRoute,
+    private sessionStorageService: SessionStorageService
+  ) { }
 
-  this.requestId = state.id;
-  this.loadUserRequest()
-  this.loadZone()
-}
+  ngOnInit() {
+    this.username = this.sessionStorageService.getItem('username') || '';
+    this.authorities = this.sessionStorageService.getObject('authorities') || [];
 
-loadZone(){
-  let queryparams =null
-  this.apiDataservice.get(queryparams, constants.api.getAllZones).subscribe({
-      next: (response: any) => {
-
-        this.allZones = response
-
-      },
-      error: (err) => {
-        console.error("Response error occured", err);
-        alert("error in loading zone");
+    if (this.authorities.length > 0) {
+      if (constants.RoleName.roleAa === this.authorities[0]) {
+        this.roleAa = true;
+      } else if (constants.RoleName.roleRail === this.authorities[0]) {
+        this.roleRail = true;
       }
     }
-  );
-}
-onZoneChange(event :any){
-  const zoneId = event .target.value;
-  this.fetchDivison(zoneId)
-}
 
-onApprovalChange(event :any){
-  const status = event .target.value;
-  if(status=="APPROVED"){
-this.showZones = true
-  }else if(status=="REJECTED"){
-    this.showZones =false;
+    const state = window.history.state;
+    this.requestId = state.id;
+
+    this.loadUserRequest();
+    this.loadZone();
   }
 
-}
-
-fetchDivison(zoneId:any){
-  const url = `${constants.api.getDivisionByCode}/${zoneId}`
-  this.apiDataservice.get( null,url).subscribe({
+  loadZone() {
+    this.apiDataservice.get(null, constants.api.getAllZones).subscribe({
       next: (response: any) => {
-
-        this.division = response
-
+        this.allZones = response;
       },
       error: (err) => {
-        console.error("Response error occured", err);
-        alert("error in the division api");
+        console.error("Error loading zone", err);
+        alert("Error in loading zone");
       }
-    }
-  );
-}
-loadUserRequest(){
-  const id ={
-    id:this.requestId
+    });
   }
 
-  if(this.roleAa){
- this.path = constants.api.aaGetEqRequest
-  }else{
-this.path =constants.api.railGetEqRequest
+  onZoneChange(event: any) {
+    const zoneId = event.target.value;
+    this.fetchDivison(zoneId);
   }
-  this.apiDataservice.get(id, this.path).subscribe({
+
+  onApprovalChange(event: any) {
+    const status = event.target.value;
+    this.showZones = status === "APPROVED";
+  }
+
+  fetchDivison(zoneId: any) {
+    const url = `${constants.api.getDivisionByCode}/${zoneId}`;
+    this.apiDataservice.get(null, url).subscribe({
       next: (response: any) => {
+        this.division = response;
+      },
+      error: (err) => {
+        console.error("Error fetching division", err);
+        alert("Error in the division API");
+      }
+    });
+  }
 
-        this.eqRequestReport = response
+  loadUserRequest() {
+    const id = { id: this.requestId };
+    this.path = this.roleAa ? constants.api.aaGetEqRequest : constants.api.railGetEqRequest;
+
+    this.apiDataservice.get(id, this.path).subscribe({
+      next: (response: any) => {
+        this.eqRequestReport = response;
         console.log("Decrypted data:", JSON.stringify(this.eqRequestReport));
-
       },
       error: (err) => {
-        console.error("Response error occured", err);
-        alert("error in the user-history api");
+        console.error("Error loading user request", err);
+        alert("Error in the user-history API");
       }
-    }
-  );
-}
+    });
+  }
 
-submitRequest(){
-  if (this.status == 'APPROVED') {
-    if (!this.forwardDivId) {
+  submitRequest() {
+    if (this.status === 'APPROVED' && !this.forwardDivId) {
       alert('Zone and Division are required when status is Approved.');
       return;
     }
-  }
-  const data:any={
-    "id":this.requestId,
-    "status":this.status,
-    "acceptedPassengers":this.acceptedPassengers,
-    "remarks":this.remarks,
 
-  }
+    const data: any = {
+      id: this.requestId,
+      status: this.status,
+      acceptedPassengers: this.acceptedPassengers,
+      remarks: this.remarks
+    };
 
-  if(this.roleAa==true){
-    data.forwardDivId = this.forwardDivId;
-  }
 
-  const missingFields: string[] = [];
-
-if (!data.id) missingFields.push('id');
-if (!data.status) missingFields.push('Approval');
-if (!data.acceptedPassengers) missingFields.push('acceptedPassengers');
-
-if (this.roleAa === true && !data.forwardDivId) {
-  missingFields.push('Div/Zone');
-}
-
-if (missingFields.length > 0) {
-  console.error('Missing required fields:', missingFields);
-  alert(`Missing required fields: ${missingFields}`);
-  return;
-}
-
-  const path = this.roleAa==true? constants.api.aaTakeAction:  constants.api.railTakeAction;
-
-  this.apiDataservice.post(data, path).subscribe({
-    next: (response: any) => {
-
-      console.log("Decrypted data:", JSON.stringify(response));
-      alert(JSON.stringify(response));
-      this.showAfterSubmission =true
-      this.successMessage = response.message;
-      setTimeout(() => {
-        this.router.navigate(['/user-history']);  
-      }, 5000);
-      
-      
-
-    },
-    error: (err) => {
-      console.error("Response error occured", err);
-      alert("error in the Submit api");
+    if (this.roleAa == true) {
+      data.forwardDivId = this.forwardDivId;
     }
+
+    const missingFields: string[] = [];
+
+    if (!data.id) missingFields.push('id');
+    if (!data.status) missingFields.push('Approval');
+    if (!data.acceptedPassengers) missingFields.push('acceptedPassengers');
+
+    if (this.roleAa === true && !data.forwardDivId) {
+      missingFields.push('Div/Zone');
+    }
+
+    if (missingFields.length > 0) {
+      console.error('Missing required fields:', missingFields);
+      alert(`Missing required fields: ${missingFields}`);
+      return;
+    }
+
+    const path = this.roleAa == true ? constants.api.aaTakeAction : constants.api.railTakeAction;
+
+    this.apiDataservice.post(data, path).subscribe({
+      next: (response: any) => {
+
+        console.log("Decrypted data:", JSON.stringify(response));
+        alert(JSON.stringify(response));
+        this.showAfterSubmission = true
+        this.successMessage = response.message;
+        setTimeout(() => {
+          this.router.navigate(['/user-history']);
+        }, 5000);
+
+
+
+      },
+      error: (err) => {
+        console.error("Response error occured", err);
+        alert("error in the Submit api");
+      }
+    });
   }
-);
-
-
-  console.log("data---" +JSON.stringify(data))
-}
-
-submitApproval(){
-
-}
-
-
-
 }

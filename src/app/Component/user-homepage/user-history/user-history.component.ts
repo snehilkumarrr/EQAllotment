@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { SessionStorageService } from 'src/app/Services/session-storage.service';
 import { Router } from '@angular/router';
 import { ApiDataService } from 'src/app/Services/apiData.service';
 import { CryptoService } from 'src/app/Services/crypto.service';
@@ -15,43 +16,35 @@ declare var $: any;
   templateUrl: './user-history.component.html',
   styleUrls: ['./user-history.component.css']
 })
-export class UserHistoryComponent implements AfterViewInit{
-  employees = [
-    { name: 'John Doe', position: 'Developer', office: 'New York', age: 30, startDate: '2020-01-01' },
-    { name: 'Jane Smith', position: 'Designer', office: 'London', age: 28, startDate: '2021-03-15' },
-    // Add more rows here
-  ];
+export class UserHistoryComponent {
+  
 
-  ngAfterViewInit() {
-    $('#myTable').DataTable();
+  initDataTable() {
+    setTimeout(() => {
+      $('#myTable').DataTable();
+    }, 0);
   }
+  
+ 
   userHistory: UserHistoryDTO[] = [];
   loginResponse: LoginResponse | null = null;
   responseRole: String = "";
   historyType: string = "P";
   requestType: any;
  
-  constructor(private apiService: ApiDataService, private router: Router, private sharedDataService: SharedDataService,) {
-    this.sharedDataService.loginUserData.subscribe((loginResponse) => {
-      if (loginResponse) {
-        this.loginResponse = loginResponse;
-        this.responseRole = loginResponse.authorities[0];
-        console.log('login response:', loginResponse.authorities[0]);
-        if(this.responseRole == "ROLE_MP") this.requestType = constants.api.sendRequest;
-        if(this.responseRole == "ROLE_AA") this.requestType = constants.api.aaSendRequest;
-        if(this.responseRole == "ROLE_RAILWAY") this.requestType = constants.api.railGetAllEqRequest;
-        
-      }
-      
-    });
+  constructor(private apiService: ApiDataService, private router: Router, private sharedDataService: SharedDataService,private sessionStorageService: SessionStorageService) {
   }
 
-  ngOnInit(){
-    this.loadUserHistory(); 
+  ngOnInit() {
+    const role = this.sessionStorageService.getObject('authorities');
+    if (role && role[0]) {
+      this.responseRole = role[0];
+      if (this.responseRole === 'ROLE_MP') this.requestType = constants.api.sendRequest;
+      if (this.responseRole === 'ROLE_AA') this.requestType = constants.api.aaSendRequest;
+      if (this.responseRole === 'ROLE_RAILWAY') this.requestType = constants.api.railGetAllEqRequest;
+    }
+    this.loadUserHistory();
   }
-
-
-
 loadUserHistory(): void {
   const HistoryQueryParam = {
     status: this.historyType
@@ -60,8 +53,10 @@ loadUserHistory(): void {
     this.apiService.get(HistoryQueryParam, this.requestType).subscribe({
         next: (response: any) => {
           console.log("Decrypted data:", response);
+         
             try {
               this.userHistory = response as UserHistoryDTO[];
+              this.initDataTable();
             } catch (e) {
               console.error("Failed to put data in the model", e);
               this.userHistory = [];

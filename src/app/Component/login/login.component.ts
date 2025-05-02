@@ -73,6 +73,8 @@ export class LoginComponent {
     this.apiDataService.post(formData, constants.api.loginwithcaptcha).subscribe(
       (response: any) => {
           this.sharedDataService.setCaptachEncryptionData(response);
+           // Save useful values in session storage
+          
 
           this.router.navigate(['/otp-page'], {
             state: {

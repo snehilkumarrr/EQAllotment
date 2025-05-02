@@ -5,35 +5,20 @@
   <div class="mb-3">
     <label for="historyTypeSelect" class="form-label fw-bold">Select Request Type: </label>
     <select
-      id="historyTypeSelect"
-      class="form-select w-auto d-inline-block"
-      [(ngModel)]="historyType"
-      (change)="onHistoryTypeChange(historyType)"
-    >
-      <option value="P" selected>Current Requests</option>
-      <option value="C">Past Requests</option>
-    </select>
+  id="historyTypeSelect"
+  class="form-select w-auto d-inline-block"
+  [(ngModel)]="historyType"  
+  (change)="onHistoryTypeChange(historyType)"  
+>
+  <option value="P" selected>Current Requests</option> <!-- Default value for 'Current Requests' -->
+  <option value="C">Past Requests</option> <!-- Option for 'Past Requests' -->
+</select>
   </div>
-  <table id="myTable" class="display">
-    <thead>
-      <tr>
-        <th>Name</th><th>Position</th><th>Office</th><th>Age</th><th>Start date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let emp of employees">
-        <td>{{ emp.name }}</td>
-        <td>{{ emp.position }}</td>
-        <td>{{ emp.office }}</td>
-        <td>{{ emp.age }}</td>
-        <td>{{ emp.startDate }}</td>
-      </tr>
-    </tbody>
-  </table>
+ 
  <!--yaha se for loop laga ke data liya userHistory variable-->
  <div class="table-responsive shadow rounded">
   <!-- Table for ROLE_MP -->
-  <table *ngIf="responseRole === 'ROLE_MP'" class="table table-hover table-bordered table-striped">
+  <table   *ngIf="responseRole === 'ROLE_MP'" class="table table-hover table-bordered table-striped">
     <thead class="table-dark text-center">
       <tr>
         <th>EQ Request No.</th>
@@ -63,7 +48,7 @@
   </table>
 
   <!-- Table for ROLE_AA -->
-  <table *ngIf="responseRole == 'ROLE_AA' || responseRole == 'ROLE_RAILWAY'"  class="table table-hover table-bordered table-striped">
+  <table  id="myTable" *ngIf="responseRole == 'ROLE_AA' || responseRole == 'ROLE_RAILWAY'"  class="table table-hover table-bordered table-striped">
     <thead class="table-dark text-center">
       <tr>
         <th>EQ Request No.</th>

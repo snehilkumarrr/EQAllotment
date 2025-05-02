@@ -1,41 +1,52 @@
-import { Component } from '@angular/core';
-import * as constants from '../../Shared/constants';
-import { Router } from '@angular/router';
-import { SharedDataService } from 'src/app/Services/sharedData.service';
-import { LoginResponse } from 'src/app/Model/loginResponse';
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { SessionStorageService } from 'src/app/Services/session-storage.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent {
+export class NavBarComponent implements OnInit {
+  userName: string = '';
+  userAuthority: string = '';
+  beforeLogout: boolean = false;
 
-  showNavHome:boolean = false;
-  showNav:boolean=true;
-  loginResponse:LoginResponse |null= null;
-  showAfterLogin:boolean=false;
-  beforeLogout:boolean=false;
-  userName:string='';
-  userAuthority:string='';
-  constructor(private router: Router, private sharedDataService: SharedDataService,){
-    this.sharedDataService.loginUserData.subscribe((loginResponse) => {
-      if (loginResponse) {
-        this.loginResponse = loginResponse;
-        if(this.loginResponse!=null){
-          this.userName = this.loginResponse.username
-          this.beforeLogout=true;
-        }
-      }
+  constructor(
+    private router: Router,
+    private sessionStorageService: SessionStorageService
+  ) {}
+
+  ngOnInit() {
+    this.loadSessionData();  // Load initially when component mounts
+
+    // Listen for route changes and re-check session storage
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.loadSessionData(); // Reload session data on each route change
     });
   }
 
+  loadSessionData() {
+    const storedUsername = this.sessionStorageService.getItem('username');
+    const storedAuthorities = this.sessionStorageService.getObject('authorities');
 
-  logoutFunction(){
-    this.sharedDataService.setloginUserData('');
-    this.loginResponse=null
-    localStorage.setItem("accessToken",'')
-    this.beforeLogout=false
-    this.router.navigate(['/']);   
+    this.beforeLogout = !!storedUsername;
+    this.userName = storedUsername || '';
+    this.userAuthority = (storedAuthorities && storedAuthorities[0]) || '';
+  }
+
+  logoutFunction() {
+    this.sessionStorageService.removeItem('username');
+    this.sessionStorageService.removeItem('authorities');
+    localStorage.removeItem('accessToken');
+
+    this.beforeLogout = false;
+    this.userName = '';
+    this.userAuthority = '';
+
+    this.router.navigate(['/']);
   }
 }
