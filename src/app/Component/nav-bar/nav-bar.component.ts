@@ -1,41 +1,52 @@
-import { Component } from '@angular/core';
-import { SessionStorageService } from '../../Services/session-storage.service';
-import * as constants from '../../Shared/constants';
-import { Router } from '@angular/router';
-import { SharedDataService } from 'src/app/Services/sharedData.service';
-import { LoginResponse } from 'src/app/Model/loginResponse';
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
+import { SessionStorageService } from 'src/app/Services/session-storage.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.css']
 })
-export class NavBarComponent {
-  beforeLogout:boolean=false;
-  userName:string='';
-  userAuthority:string='';
-  constructor(private router: Router, private sharedDataService: SharedDataService,
-    private sessionStorageService: SessionStorageService){}
-    ngOnInit() {
-      const storedUsername = this.sessionStorageService.getItem('username');
-      const storedAuthorities = this.sessionStorageService.getObject('authorities');
-  
-      if (storedUsername) {
-        this.userName = storedUsername;
-        this.beforeLogout = true;
-      }
-      console.log("------Username------" +JSON.stringify( this.userName))
-      if (storedAuthorities && Array.isArray(storedAuthorities)) {
-        this.userAuthority = storedAuthorities[0]; // assuming single role
-      }
-      console.log("------Authority------" +JSON.stringify( this.userAuthority))
-    }
+export class NavBarComponent implements OnInit {
+  userName: string = '';
+  userAuthority: string = '';
+  beforeLogout: boolean = false;
+
+  constructor(
+    private router: Router,
+    private sessionStorageService: SessionStorageService
+  ) {}
+
+  ngOnInit() {
+    this.loadSessionData();  // Load initially when component mounts
+
+    // Listen for route changes and re-check session storage
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.loadSessionData(); // Reload session data on each route change
+    });
+  }
+
+  loadSessionData() {
+    const storedUsername = this.sessionStorageService.getItem('username');
+    const storedAuthorities = this.sessionStorageService.getObject('authorities');
+
+    this.beforeLogout = !!storedUsername;
+    this.userName = storedUsername || '';
+    this.userAuthority = (storedAuthorities && storedAuthorities[0]) || '';
+  }
+
   logoutFunction() {
     this.sessionStorageService.removeItem('username');
     this.sessionStorageService.removeItem('authorities');
     localStorage.removeItem('accessToken');
-    
+
     this.beforeLogout = false;
+    this.userName = '';
+    this.userAuthority = '';
+
     this.router.navigate(['/']);
   }
 }
