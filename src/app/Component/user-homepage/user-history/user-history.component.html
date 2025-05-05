@@ -22,7 +22,7 @@
       Download PDF
     </button>
   </div>
-  <table id="myTable" *ngIf="responseRole != null"  class="table table-hover table-bordered table-striped">
+  <table id="myTable" *ngIf="responseRole != null && tableInitialized" class="table table-hover table-bordered table-striped">
     <thead class="table-dark text-center">
       <tr>
         <th>EQ Request No.</th>
