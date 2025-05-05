@@ -1,6 +1,3 @@
-
-<!--drop down to select P ya C, P ka mtlb Current hai C ka past-->
-
 <div class="container mt-4">
   <div class="mb-3">
     <label for="historyTypeSelect" class="form-label fw-bold">Select Request Type: </label>
@@ -14,11 +11,18 @@
   <option value="C">Past Requests</option> <!-- Option for 'Past Requests' -->
 </select>
   </div>
- 
- <!--yaha se for loop laga ke data liya userHistory variable-->
+  <!DOCTYPE html>
+  
  <div class="table-responsive shadow rounded">
-  <!-- Table for ROLE_MP -->
-  <table   *ngIf="responseRole === 'ROLE_MP'" class="table table-hover table-bordered table-striped">
+  <div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-success me-2" (click)="exportToExcel()">
+      Download Excel
+    </button>
+    <button class="btn btn-danger" (click)="exportToPDF()">
+      Download PDF
+    </button>
+  </div>
+  <table id="myTable" *ngIf="responseRole != null"  class="table table-hover table-bordered table-striped">
     <thead class="table-dark text-center">
       <tr>
         <th>EQ Request No.</th>
@@ -30,43 +34,14 @@
         <th>Current Status</th>
         <th>Remarks by Railways</th>
         <th>Created On</th>
-      </tr>
-    </thead>
-    <tbody class="text-center">
-      <tr *ngFor="let row of userHistory">
-        <td>{{ row.eqRequestNo }}</td>
-        <td>{{ row.pnr }}</td>
-        <td>{{ row.trainNo }}</td>
-        <td>{{ row.totalPassengers }}</td>
-        <td>{{ row.requestPassengers }}</td>
-        <td>{{ row.acceptedPassengers || "N/A" }}</td>
-        <td>{{ row.currentStatus }}</td>
-        <td>{{ row.remarks || "nil" }}</td>
-        <td>{{ row.createdOn }}</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Table for ROLE_AA -->
-  <table  id="myTable" *ngIf="responseRole == 'ROLE_AA' || responseRole == 'ROLE_RAILWAY'"  class="table table-hover table-bordered table-striped">
-    <thead class="table-dark text-center">
-      <tr>
-        <th>EQ Request No.</th>
-        <th>PNR</th>
-        <th>Train No.</th>
-        <th>Total Passengers</th>
-        <th>Requested Passengers</th>
-        <th>Accepted Passengers</th>
-        <th>Current Status</th>
-        <th>Remarks by Railways</th>
-        <th>Created On</th>
-        <!-- New Columns -->
+        <ng-container *ngIf="responseRole == 'ROLE_AA' || responseRole == 'ROLE_RAILWAY'">
         <th>Train Start Date</th>
         <th>Train Journey Date</th>
         <th>Source Station</th>
         <th>Destination</th>
         <th>Requested by</th>
-        <th></th>
+        <th>Action</th>
+        </ng-container>
       </tr>
     </thead>
     <tbody class="text-center">
@@ -80,6 +55,7 @@
         <td>{{ row.currentStatus }}</td>
         <td>{{ row.remarks || "nil" }}</td>
         <td>{{ row.createdOn }}</td>
+        <ng-container *ngIf="responseRole == 'ROLE_AA' || responseRole == 'ROLE_RAILWAY' ">
         <td>{{ row.trainStartDate || "N/A" }}</td>
         <td>{{ row.jrnyDate || "N/A" }}</td>
         <td>{{ row.srcStation || "N/A" }}</td>
@@ -87,13 +63,11 @@
         <td>{{ row.mpName || "N/A" }}</td>
         <td>
           <button
-            *ngIf="responseRole && row.assignedToAuthority && responseRole === row.assignedToAuthority"
-            class="btn btn-primary btn-sm"
-            (click)="takeAction(row.id)"
-          >
+            *ngIf="responseRole && row.assignedToAuthority && responseRole === row.assignedToAuthority" class="btn btn-primary btn-sm" (click)="takeAction(row.id)">
             Take Action
           </button>
         </td>
+      </ng-container>
       </tr>
     </tbody>
   </table>
