@@ -1,13 +1,13 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { SessionStorageService } from 'src/app/Services/session-storage.service';
-import { SessionStorageService } from 'src/app/Services/session-storage.service';
 import { Router } from '@angular/router';
+import { SessionStorageService } from 'src/app/Services/session-storage.service';
 import { ApiDataService } from 'src/app/Services/apiData.service';
 import { CryptoService } from 'src/app/Services/crypto.service';
 import * as constants from 'src/app/Shared/constants';
 import { UserHistoryDTO } from 'src/app/Model/user-history.dto';
 import { LoginResponse } from 'src/app/Model/loginResponse';
 import { SharedDataService } from 'src/app/Services/sharedData.service';
+import { ChangeDetectorRef } from '@angular/core';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
@@ -21,52 +21,47 @@ import autoTable from 'jspdf-autotable';
   styleUrls: ['./user-history.component.css']
 })
 export class UserHistoryComponent {
-  initDataTable() {
-    setTimeout(() => {
-      $('#myTable').DataTable();
-    }, 0);
-  }
-  
- 
+
   userHistory: UserHistoryDTO[] = [];
   loginResponse: LoginResponse | null = null;
   responseRole: String = "";
   historyType: string = "P";
   requestType: any;
- 
-  constructor(private apiService: ApiDataService, private router: Router, private sharedDataService: SharedDataService,) {
-    this.sharedDataService.loginUserData.subscribe((loginResponse) => {
-      if (loginResponse) {
-        this.loginResponse = loginResponse;
-        this.responseRole = loginResponse.authorities[0];
-        console.log('login response:', loginResponse.authorities[0]);
-        if(this.responseRole == "ROLE_MP") this.requestType = constants.api.sendRequest;
-        if(this.responseRole == "ROLE_AA") this.requestType = constants.api.aaSendRequest;
-        if(this.responseRole == "ROLE_RAILWAY") this.requestType = constants.api.railGetAllEqRequest;
-        
-      }
-      
-    });
-  }
+  tableInitialized = false;
+
+  constructor(private apiService: ApiDataService, private router: Router, private sharedDataService: SharedDataService, private sessionStorageService: SessionStorageService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(){
-    this.loadUserHistory(); 
+    const role = this.sessionStorageService.getObject('authorities');
+    if (role && role[0]) {
+      this.responseRole = role[0];
+      if (this.responseRole === 'ROLE_MP') this.requestType = constants.api.sendRequest;
+      if (this.responseRole === 'ROLE_AA') this.requestType = constants.api.aaSendRequest;
+      if (this.responseRole === 'ROLE_RAILWAY') this.requestType = constants.api.railGetAllEqRequest;
+    }
+    this.loadUserHistory();
   }
 
-
-
-loadUserHistory(): void {
+  loadUserHistory(): void {
   const HistoryQueryParam = {
     status: this.historyType
-  };
-    
+    };
+    this.tableInitialized = false;
+  if ($.fn.DataTable.isDataTable('#myTable')) {
+    $('#myTable').DataTable().clear().destroy();
+    }
     this.apiService.get(HistoryQueryParam, this.requestType).subscribe({
         next: (response: any) => {
           console.log("Decrypted data:", response);
-         
             try {
               this.userHistory = response as UserHistoryDTO[];
-              this.initDataTable();
+              this.cdr.detectChanges();
+              setTimeout(() => {
+                this.tableInitialized = true;
+                setTimeout(() => {
+                  $('#myTable').DataTable();
+                }, 0);
+              }, 0);
             } catch (e) {
               console.error("Failed to put data in the model", e);
               this.userHistory = [];
@@ -81,6 +76,7 @@ loadUserHistory(): void {
     );
  }
  onHistoryTypeChange(type: string): void {
+  console.log(type);
   this.historyType = type;
   this.loadUserHistory();
 }
