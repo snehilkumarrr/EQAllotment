@@ -88,16 +88,67 @@ takeAction(id: any): void {
   });      
 }
 exportToExcel(): void {
-  const element = document.getElementById('myTable');
-  const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+  const element = document.getElementById('myTable') as HTMLTableElement;
+  if (!element) return;
+
+  const clonedTable = element.cloneNode(true) as HTMLTableElement;
+
+  
+  if (this.responseRole === 'ROLE_AA' || this.responseRole === 'ROLE_RAILWAY') {
+      clonedTable.querySelectorAll('thead tr').forEach(row => {
+      row.removeChild(row.lastElementChild!);
+    });
+    clonedTable.querySelectorAll('tbody tr').forEach(row => {
+      row.removeChild(row.lastElementChild!);
+    });
+  }
+
+  clonedTable.style.display = 'none';
+  clonedTable.id = 'tempExcelTable';
+  document.body.appendChild(clonedTable);
+
+  const tempTable = document.getElementById('tempExcelTable');
+  const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(tempTable);
   const wb: XLSX.WorkBook = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  
+  document.body.removeChild(clonedTable);
   XLSX.writeFile(wb, 'UserData.xlsx');
 }
 
 exportToPDF(): void {
-  const doc = new jsPDF();
-  autoTable(doc, { html: '#myTable' });
+  const doc = new jsPDF('landscape');
+  const table = document.getElementById('myTable') as HTMLTableElement;
+  if (!table) return;
+
+  const clonedTable = table.cloneNode(true) as HTMLTableElement;
+  if (this.responseRole === 'ROLE_AA' || this.responseRole === 'ROLE_RAILWAY') {
+      clonedTable.querySelectorAll('thead tr').forEach(row => {
+      row.removeChild(row.lastElementChild!);
+    });
+
+    clonedTable.querySelectorAll('tbody tr').forEach(row => {
+      row.removeChild(row.lastElementChild!);
+    });
+  }
+
+
+  clonedTable.style.display = 'none';
+  clonedTable.id = 'tempPdfTable';
+  document.body.appendChild(clonedTable);
+
+  autoTable(doc, {
+    html: '#tempPdfTable',
+    styles: {
+      fontSize: 6,
+      cellPadding: 1
+    },
+    margin: { top: 10 }
+  });
+
+  // Remove it after generating PDF
+  document.body.removeChild(clonedTable);
+
   doc.save('UserData.pdf');
 }
 }
