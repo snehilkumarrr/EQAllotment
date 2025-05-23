@@ -1,0 +1,29 @@
+select {
+    margin-right: .6em; /* Adds 1em margin below the select element */
+    display: inline-block;
+  }
+
+.form-label fw-bold {
+    margin-right: .6em;
+}
+
+#historyTypeSelect {
+    margin-left: .6em;
+}
+
+#button {
+    margin-top: -15px;
+    display: inline-block;
+}
+
+.table-responsive {
+    margin-bottom: 2em;
+}
+
+div.dataTables_filter input {
+    width: 300px;
+  }
+
+#historyTypeSelect {
+    margin-bottom: .6em;
+}

@@ -10,35 +10,30 @@
   <option value="P" selected>Current Requests</option> <!-- Default value for 'Current Requests' -->
   <option value="C">Past Requests</option> <!-- Option for 'Past Requests' -->
 </select>
+<div id="button">
+  <button  class="btn btn-success me-2" (click)="exportToExcel()">
+    Download Excel
+  </button>
+  <button  class="btn btn-danger" (click)="exportToPDF()">
+    Download PDF
+  </button>
+</div>
   </div>
   <!DOCTYPE html>
   
  <div class="table-responsive shadow rounded">
-  <div class="d-flex justify-content-end mb-3">
-    <button class="btn btn-success me-2" (click)="exportToExcel()">
-      Download Excel
-    </button>
-    <button class="btn btn-danger" (click)="exportToPDF()">
-      Download PDF
-    </button>
-  </div>
-  <table id="myTable" *ngIf="responseRole != null && tableInitialized" class="table table-hover table-bordered table-striped">
+  <table id="myTable" *ngIf="responseRole != null && tableInitialized" class=" table table-hover table-bordered table-striped">
     <thead class="table-dark text-center">
       <tr>
         <th>EQ Request No.</th>
-        <th>PNR</th>
         <th>Train No.</th>
-        <th>Total Passengers</th>
-        <th>Requested Passengers</th>
-        <th>Accepted Passengers</th>
+        <th>Accepted / Requested / Total Passengers</th>
         <th>Current Status</th>
-        <th>Remarks by Railways</th>
         <th>Created On</th>
         <ng-container *ngIf="responseRole == 'ROLE_AA' || responseRole == 'ROLE_RAILWAY'">
         <th>Train Start Date</th>
         <th>Train Journey Date</th>
-        <th>Source Station</th>
-        <th>Destination</th>
+        <th>Source / Destination</th>
         <th>Requested by</th>
         <th>Action</th>
         </ng-container>
@@ -46,20 +41,15 @@
     </thead>
     <tbody class="text-center">
       <tr *ngFor="let row of userHistory">
-        <td>{{ row.eqRequestNo }}</td>
-        <td>{{ row.pnr }}</td>
+        <td>{{ row.eqRequestNo }} ({{ row.pnr }}) </td>
         <td>{{ row.trainNo }}</td>
-        <td>{{ row.totalPassengers }}</td>
-        <td>{{ row.requestPassengers }}</td>
-        <td>{{ row.acceptedPassengers || "N/A" }}</td>
+        <td>{{ row.acceptedPassengers || "NA" }} / {{ row.requestPassengers }} / {{ row.totalPassengers }}</td>
         <td>{{ row.currentStatus }}</td>
-        <td>{{ row.remarks || "nil" }}</td>
         <td>{{ row.createdOn }}</td>
         <ng-container *ngIf="responseRole == 'ROLE_AA' || responseRole == 'ROLE_RAILWAY' ">
         <td>{{ row.trainStartDate || "N/A" }}</td>
         <td>{{ row.jrnyDate || "N/A" }}</td>
-        <td>{{ row.srcStation || "N/A" }}</td>
-        <td>{{ row.destStation || "N/A" }}</td>
+        <td>{{ row.srcStation || "N/A" }} / {{ row.destStation || "N/A" }}</td>
         <td>{{ row.mpName || "N/A" }}</td>
         <td>
           <button
