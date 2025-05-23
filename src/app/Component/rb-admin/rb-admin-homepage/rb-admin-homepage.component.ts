@@ -27,6 +27,9 @@ export class RbAdminHomepageComponent {
   roleAa: boolean = false;
   roleRail: boolean = false;
   path: any;
+  showAfterSubmission:boolean=false;
+  successMessage:any;
+
 
   username: string = '';
   authorities: string[] = [];
@@ -121,28 +124,47 @@ export class RbAdminHomepageComponent {
       remarks: this.remarks
     };
 
-    if (this.roleAa) {
+
+    if (this.roleAa == true) {
       data.forwardDivId = this.forwardDivId;
     }
 
-    const path = this.roleAa ? constants.api.aaTakeAction : constants.api.railTakeAction;
+    const missingFields: string[] = [];
+
+    if (!data.id) missingFields.push('id');
+    if (!data.status) missingFields.push('Approval');
+    if (!data.acceptedPassengers) missingFields.push('acceptedPassengers');
+
+    if (this.roleAa === true && !data.forwardDivId && this.status=='APPROVED') {
+      missingFields.push('Div/Zone');
+    }
+
+    if (missingFields.length > 0) {
+      console.error('Missing required fields:', missingFields);
+      alert(`Missing required fields: ${missingFields}`);
+      return;
+    }
+
+    const path = this.roleAa == true ? constants.api.aaTakeAction : constants.api.railTakeAction;
 
     this.apiDataservice.post(data, path).subscribe({
       next: (response: any) => {
+
         console.log("Decrypted data:", JSON.stringify(response));
         alert(JSON.stringify(response));
-        this.router.navigate(['/user-history']);
+        this.showAfterSubmission = true
+        this.successMessage = response.message;
+        setTimeout(() => {
+          this.router.navigate(['/user-history']);
+        }, 5000);
+
+
+
       },
       error: (err) => {
-        console.error("Error submitting request", err);
-        alert("Error in the Submit API");
+        console.error("Response error occured", err);
+        alert("error in the Submit api");
       }
     });
-
-    console.log("Submitted data:", JSON.stringify(data));
-  }
-
-  submitApproval() {
-    // Placeholder if needed
   }
 }

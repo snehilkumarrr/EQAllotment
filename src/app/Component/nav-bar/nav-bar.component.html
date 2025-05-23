@@ -23,12 +23,16 @@
     
         <!-- Show these only if loginResponse is NOT null -->
         <ng-container *ngIf="beforeLogout">
+          <ng-container *ngIf="userAuthority == 'ROLE_MP'  ">
           <li class="nav-item">
             <a class="nav-link" routerLink="/apply-quota">Apply Quota</a>
           </li>
+          </ng-container>
+          <ng-container *ngIf="userAuthority == 'ROLE_AA' || userAuthority == 'ROLE_RAILWAY' || userAuthority == 'ROLE_MP' ">
           <li class="nav-item">
             <a class="nav-link" routerLink="/user-history">User History</a>
           </li>
+          </ng-container>
           <li class="nav-item">
             <span class="nav-link">Welcome, {{ userName }}</span>
           </li>

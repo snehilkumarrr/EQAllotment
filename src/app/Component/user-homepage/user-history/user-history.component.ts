@@ -53,7 +53,7 @@ export class UserHistoryComponent {
     this.apiService.get(HistoryQueryParam, this.requestType).subscribe({
         next: (response: any) => {
           console.log("Decrypted data:", response);
-            try {
+           
               this.userHistory = response as UserHistoryDTO[];
               this.cdr.detectChanges();
               setTimeout(() => {
@@ -62,14 +62,10 @@ export class UserHistoryComponent {
                   $('#myTable').DataTable();
                 }, 0);
               }, 0);
-            } catch (e) {
-              console.error("Failed to put data in the model", e);
-              this.userHistory = [];
-            }
-          
+           
         },
         error: (err) => {
-          console.error("Response error occured", err);
+          console.error("Response error occured", err.error.message);
           alert("error in the user-history api");
         }
       }
